@@ -1,6 +1,7 @@
 import {
   Label,
   TableColumnDefinition,
+  TableColumnSizingOptions,
   createTableColumn,
 } from "@fluentui/react-components";
 import { ITableV2Column } from "./Interface";
@@ -37,3 +38,18 @@ export const CreateColumnHeader = (defaultColumns: ITableV2Column[]) =>
 
     return columns;
   }, [defaultColumns]);
+
+export const GetTableColumnSizingOptions = (
+  columns: ITableV2Column[]
+): TableColumnSizingOptions => {
+  const columnSizingOptions: TableColumnSizingOptions = {};
+  columns.forEach((column) => {
+    if (column.minWidth) {
+      columnSizingOptions[column.key] = {
+        minWidth: column.minWidth,
+      };
+    }
+  });
+
+  return columnSizingOptions;
+};

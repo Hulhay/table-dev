@@ -91,6 +91,50 @@ export const columnsSortingDummy: ITableV2Column[] = [
   },
 ];
 
+export const columnsWidthDummy: ITableV2Column[] = [
+  {
+    key: "title",
+    label: "Title",
+    dataIndex: "title",
+    minWidth: 350,
+  },
+  {
+    key: "assignee",
+    label: "Assignee",
+    dataIndex: "assignee",
+    minWidth: 200,
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.assignee.localeCompare(b.assignee);
+    },
+  },
+  {
+    key: "priority",
+    label: "Priority",
+    dataIndex: "priority",
+    onRenderDataSource: (data: IDataSourceBasic) => titleCase(data.priority),
+  },
+  {
+    key: "status",
+    label: "Status",
+    dataIndex: "status",
+    onRenderDataSource: (data: IDataSourceBasic) => {
+      return <Status status={data.status} />;
+    },
+  },
+  {
+    key: "action",
+    label: "Action",
+    onRenderDataSource: () => {
+      return (
+        <Icon
+          iconName="MoreVertical"
+          styles={{ root: { cursor: "pointer" } }}
+        />
+      );
+    },
+  },
+];
+
 export const dataSourceDummy: IDataSourceBasic[] = [
   {
     id: "task-1",

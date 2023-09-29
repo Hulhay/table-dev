@@ -8,6 +8,7 @@ const BasicUncontrolled: React.FC = () => {
       <TableV2
         defaultColumns={columnsDummy}
         defaultDataSource={dataSourceDummy}
+        resizable={false}
       />
     </div>
   );

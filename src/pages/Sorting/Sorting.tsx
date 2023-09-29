@@ -13,6 +13,7 @@ const Sorting: React.FC = () => {
       <TableV2
         defaultColumns={columnsSortingDummy}
         defaultDataSource={dataSourceDummy}
+        resizable={false}
       />
     </div>
   );
