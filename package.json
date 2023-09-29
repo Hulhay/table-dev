@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fluentui/react": "^8.111.2",
+    "@fluentui/react-components": "^9.32.3",
+    "@fluentui/react-icons": "^2.0.218",
     "@kitameraki/teamswork-library": "file:../teamswork-library",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

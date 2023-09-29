@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { Home, NotFound } from "../pages";
+import { BasicUncontrolled, Home, NotFound } from "../pages";
 import Layout from "./Layout";
 
 const Navigations = createBrowserRouter([
@@ -12,6 +12,10 @@ const Navigations = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "basic-uncontrolled",
+        element: <BasicUncontrolled />,
       },
     ],
   },

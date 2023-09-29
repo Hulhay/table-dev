@@ -12,6 +12,11 @@ const navLink: INavLinkGroup[] = [
         url: "/",
         key: "home",
       },
+      {
+        name: "Basic Uncontrolled",
+        url: "/basic-uncontrolled",
+        key: "basic-uncontrolled",
+      },
     ],
   },
 ];
