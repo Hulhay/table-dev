@@ -17,6 +17,11 @@ const navLink: INavLinkGroup[] = [
         url: "/basic-uncontrolled",
         key: "basic-uncontrolled",
       },
+      {
+        name: "Sorting",
+        url: "/sorting",
+        key: "sorting",
+      },
     ],
   },
 ];

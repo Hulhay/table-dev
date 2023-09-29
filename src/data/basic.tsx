@@ -43,6 +43,54 @@ export const columnsDummy: ITableV2Column[] = [
   },
 ];
 
+export const columnsSortingDummy: ITableV2Column[] = [
+  {
+    key: "title",
+    label: "Title",
+    dataIndex: "title",
+  },
+  {
+    key: "assignee",
+    label: "Assignee",
+    dataIndex: "assignee",
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.assignee.localeCompare(b.assignee);
+    },
+  },
+  {
+    key: "priority",
+    label: "Priority",
+    dataIndex: "priority",
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.priority.localeCompare(b.priority);
+    },
+    onRenderDataSource: (data: IDataSourceBasic) => titleCase(data.priority),
+  },
+  {
+    key: "status",
+    label: "Status",
+    dataIndex: "status",
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.status.localeCompare(b.status);
+    },
+    onRenderDataSource: (data: IDataSourceBasic) => {
+      return <Status status={data.status} />;
+    },
+  },
+  {
+    key: "action",
+    label: "Action",
+    onRenderDataSource: () => {
+      return (
+        <Icon
+          iconName="MoreVertical"
+          styles={{ root: { cursor: "pointer" } }}
+        />
+      );
+    },
+  },
+];
+
 export const dataSourceDummy: IDataSourceBasic[] = [
   {
     id: "task-1",

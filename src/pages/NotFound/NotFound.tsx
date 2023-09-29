@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "../../components";
 import { buttonStyle, stackStyle } from "./NotFoundStyle";
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
   const onClick = () => {
