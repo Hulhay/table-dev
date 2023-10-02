@@ -27,6 +27,11 @@ const navLink: INavLinkGroup[] = [
         url: "/resize",
         key: "resize",
       },
+      {
+        name: "Rearrange Column",
+        url: "/rearrange-column",
+        key: "rearrange-column",
+      },
     ],
   },
 ];

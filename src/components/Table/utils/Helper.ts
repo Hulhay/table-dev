@@ -1,11 +1,9 @@
 import {
-  Label,
   TableColumnDefinition,
   TableColumnSizingOptions,
   createTableColumn,
 } from "@fluentui/react-components";
 import { ITableV2Column } from "./Interface";
-import { ArrowSort16Regular } from "@fluentui/react-icons";
 import { useMemo } from "react";
 
 export const CreateColumnHeader = (defaultColumns: ITableV2Column[]) =>
@@ -17,21 +15,6 @@ export const CreateColumnHeader = (defaultColumns: ITableV2Column[]) =>
         createTableColumn({
           columnId: column.key,
           compare: column.compare,
-          renderHeaderCell: () => {
-            return (
-              <Label
-                style={{
-                  fontWeight: "bold",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 3,
-                }}
-              >
-                {column.compare && <ArrowSort16Regular />}
-                {column.label}
-              </Label>
-            );
-          },
         })
       );
     });
@@ -52,4 +35,16 @@ export const GetTableColumnSizingOptions = (
   });
 
   return columnSizingOptions;
+};
+
+export const Reorder = (
+  list: any[],
+  sourceIndex: number,
+  destinationIndex: number
+) => {
+  const result = [...list];
+  const [removed] = result.splice(sourceIndex, 1);
+  result.splice(destinationIndex, 0, removed);
+
+  return result;
 };

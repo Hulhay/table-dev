@@ -9,7 +9,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableColumnDefinition,
   TableColumnId,
   TableHeader,
   TableHeaderCell,
@@ -22,10 +21,17 @@ import {
 import {
   CreateColumnHeader,
   GetTableColumnSizingOptions,
+  Reorder,
 } from "./utils/Helper";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import HeaderCell from "./HeaderCell";
 
 const TableV2: React.FC<ITableV2> = (props) => {
-  const defaultColumns = props.defaultColumns || props.defaultColumns || [];
+  const [defaultColumns, setDefaultColumns] = useState<ITableV2Column[]>(
+    props.defaultColumns || props.columns || []
+  );
+
   const defaultDataSource = props.defaultDataSource || props.dataSource || [];
   const [columnSizingOptions] = useState(
     GetTableColumnSizingOptions(defaultColumns)
@@ -38,7 +44,6 @@ const TableV2: React.FC<ITableV2> = (props) => {
   const {
     tableRef,
     getRows,
-    columns,
     columnSizing_unstable,
     sort: { getSortDirection, toggleColumnSort, sort },
   } = useTableFeatures(
@@ -59,7 +64,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
   const headerSortProps = (columnId: TableColumnId) => ({
     onClick: (e: React.MouseEvent) => {
-      const column = columns.find((column) => column.columnId === columnId);
+      const column = defaultColumns.find((column) => column.key === columnId);
       column?.compare && toggleColumnSort(e, columnId);
     },
     sortDirection: getSortDirection(columnId),
@@ -67,69 +72,83 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
   const rows = sort(getRows());
 
+  const moveColumn = (fromIndex: number, toIndex: number) => {
+    const newOrderHeader = Reorder(defaultColumns, fromIndex, toIndex);
+    setDefaultColumns(newOrderHeader);
+  };
+
   return (
-    <Table
-      ref={props.resizable === false ? undefined : tableRef}
-      {...columnSizing_unstable.getTableProps()}
-    >
-      {/* Table Header */}
-      <TableHeader>
-        <TableRow style={{backgroundColor: "#eeeeee"}}>
-          {columns.map((column: TableColumnDefinition<any>, index: number) => {
-            return (
-              <Menu openOnContext key={column.columnId}>
-                <MenuTrigger>
-                  <TableHeaderCell
-                    key={column.columnId}
-                    tabIndex={index}
-                    {...columnSizing_unstable.getTableHeaderCellProps(
-                      column.columnId
-                    )}
-                    {...(column.compare.length > 0 &&
-                      headerSortProps(column.columnId))}
-                  >
-                    {column.renderHeaderCell()}
-                  </TableHeaderCell>
-                </MenuTrigger>
-                <MenuPopover>
-                  <MenuList>
-                    <MenuItem
-                      onClick={columnSizing_unstable.enableKeyboardMode(
-                        column.columnId
+    <DndProvider backend={HTML5Backend}>
+      <Table
+        ref={props.resizable === false ? undefined : tableRef}
+        {...columnSizing_unstable.getTableProps()}
+      >
+        {/* Table Header */}
+        <TableHeader>
+          <TableRow style={{ backgroundColor: "#eeeeee" }}>
+            {defaultColumns.map((column: ITableV2Column, index: number) => {
+              return (
+                <Menu openOnContext key={column.key}>
+                  <MenuTrigger>
+                    <TableHeaderCell
+                      key={column.key}
+                      tabIndex={index}
+                      {...columnSizing_unstable.getTableHeaderCellProps(
+                        column.key
                       )}
+                      {...(column.compare && headerSortProps(column.key))}
                     >
-                      Keyboard Column Resizing
-                    </MenuItem>
-                  </MenuList>
-                </MenuPopover>
-              </Menu>
+                      <HeaderCell
+                        column={column}
+                        index={index}
+                        key={column.key}
+                        moveColumn={moveColumn}
+                        rearrangeColumnEnabled={
+                          props.rearrangeColumnEnabled === true ? true : false
+                        }
+                      />
+                    </TableHeaderCell>
+                  </MenuTrigger>
+                  <MenuPopover>
+                    <MenuList>
+                      <MenuItem
+                        onClick={columnSizing_unstable.enableKeyboardMode(
+                          column.key
+                        )}
+                      >
+                        Keyboard Column Resizing
+                      </MenuItem>
+                    </MenuList>
+                  </MenuPopover>
+                </Menu>
+              );
+            })}
+          </TableRow>
+        </TableHeader>
+
+        {/* Table Body */}
+        <TableBody>
+          {rows.map((row: TableRowData<any>, index: number) => {
+            return (
+              <TableRow key={index} tabIndex={index}>
+                {defaultColumns.map((column: ITableV2Column) => {
+                  return (
+                    <TableCell
+                      key={row.item[column.dataIndex || column.key]}
+                      {...columnSizing_unstable.getTableCellProps(column.key)}
+                    >
+                      {column.onRenderDataSource
+                        ? column.onRenderDataSource(row.item)
+                        : row.item[column.dataIndex || ""]}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
             );
           })}
-        </TableRow>
-      </TableHeader>
-
-      {/* Table Body */}
-      <TableBody>
-        {rows.map((row: TableRowData<any>, index: number) => {
-          return (
-            <TableRow key={index} tabIndex={index}>
-              {defaultColumns.map((column: ITableV2Column) => {
-                return (
-                  <TableCell
-                    key={row.item[column.dataIndex || column.key]}
-                    {...columnSizing_unstable.getTableCellProps(column.key)}
-                  >
-                    {column.onRenderDataSource
-                      ? column.onRenderDataSource(row.item)
-                      : row.item[column.dataIndex || ""]}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+        </TableBody>
+      </Table>
+    </DndProvider>
   );
 };
 

@@ -1,6 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { BasicUncontrolled, Home, NotFound, Resize, Sorting } from "../pages";
+import {
+  BasicUncontrolled,
+  Home,
+  NotFound,
+  RearrangeColumn,
+  Resize,
+  Sorting,
+} from "../pages";
 import Layout from "./Layout";
 
 const Navigations = createBrowserRouter([
@@ -24,6 +31,10 @@ const Navigations = createBrowserRouter([
       {
         path: "resize",
         element: <Resize />,
+      },
+      {
+        path: "rearrange-column",
+        element: <RearrangeColumn />,
       },
     ],
   },
