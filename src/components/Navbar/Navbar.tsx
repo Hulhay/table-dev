@@ -38,7 +38,7 @@ const navLink: INavLinkGroup[] = [
         key: "single-selection",
       },
       {
-        name: "Multiple Selection",
+        name: "Multiple Selection Uncontrolled",
         url: "/multiple-selection",
         key: "multiple-selection",
       },
