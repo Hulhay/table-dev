@@ -13,9 +13,10 @@ import {
   TableHeader,
   TableHeaderCell,
   TableRow,
-  TableRowData,
+  TableSelectionCell,
   useTableColumnSizing_unstable,
   useTableFeatures,
+  useTableSelection,
   useTableSort,
 } from "@fluentui/react-components";
 import {
@@ -46,6 +47,13 @@ const TableV2: React.FC<ITableV2> = (props) => {
     getRows,
     columnSizing_unstable,
     sort: { getSortDirection, toggleColumnSort, sort },
+    selection: {
+      toggleRow,
+      isRowSelected,
+      allRowsSelected,
+      someRowsSelected,
+      toggleAllRows,
+    },
   } = useTableFeatures(
     {
       columns: CreateColumnHeader(defaultColumns),
@@ -59,6 +67,10 @@ const TableV2: React.FC<ITableV2> = (props) => {
           sortDirection: "ascending",
         },
       }),
+      useTableSelection({
+        selectionMode:
+          props.selectionMode !== undefined ? props.selectionMode : "single",
+      }),
     ]
   );
 
@@ -70,7 +82,20 @@ const TableV2: React.FC<ITableV2> = (props) => {
     sortDirection: getSortDirection(columnId),
   });
 
-  const rows = sort(getRows());
+  const rows = sort(
+    getRows((row) => {
+      const selected = isRowSelected(row.rowId);
+      return {
+        ...row,
+        onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
+        selected,
+        appearance:
+          selected && props.selectionMode
+            ? ("brand" as const)
+            : ("none" as const),
+      };
+    })
+  );
 
   const moveColumn = (fromIndex: number, toIndex: number) => {
     const newOrderHeader = Reorder(defaultColumns, fromIndex, toIndex);
@@ -86,6 +111,16 @@ const TableV2: React.FC<ITableV2> = (props) => {
         {/* Table Header */}
         <TableHeader>
           <TableRow style={{ backgroundColor: "#eeeeee" }}>
+            {props.selectionMode && (
+              <TableSelectionCell
+                type={props.selectionMode === "single" ? "radio" : "checkbox"}
+                checked={
+                  allRowsSelected ? true : someRowsSelected ? "mixed" : false
+                }
+                hidden={props.selectionMode !== "multiselect"}
+                onClick={toggleAllRows}
+              />
+            )}
             {defaultColumns.map((column: ITableV2Column, index: number) => {
               return (
                 <Menu openOnContext key={column.key}>
@@ -128,18 +163,30 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
         {/* Table Body */}
         <TableBody>
-          {rows.map((row: TableRowData<any>, index: number) => {
+          {rows.map(({ item, selected, onClick, appearance }, index) => {
             return (
-              <TableRow key={index} tabIndex={index}>
+              <TableRow
+                key={index}
+                tabIndex={index}
+                onClick={onClick}
+                appearance={appearance}
+              >
+                {props.selectionMode && (
+                  <TableSelectionCell
+                    subtle={props.subtleSelection}
+                    type={props.selectionMode === "single" ? "radio" : "checkbox"}
+                    checked={selected}
+                  />
+                )}
                 {defaultColumns.map((column: ITableV2Column) => {
                   return (
                     <TableCell
-                      key={row.item[column.dataIndex || column.key]}
+                      key={item[column.dataIndex || column.key]}
                       {...columnSizing_unstable.getTableCellProps(column.key)}
                     >
                       {column.onRenderDataSource
-                        ? column.onRenderDataSource(row.item)
-                        : row.item[column.dataIndex || ""]}
+                        ? column.onRenderDataSource(item)
+                        : item[column.dataIndex || ""]}
                     </TableCell>
                   );
                 })}

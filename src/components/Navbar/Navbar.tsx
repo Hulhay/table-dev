@@ -32,6 +32,16 @@ const navLink: INavLinkGroup[] = [
         url: "/rearrange-column",
         key: "rearrange-column",
       },
+      {
+        name: "Single Selection Uncontrolled",
+        url: "/single-selection",
+        key: "single-selection",
+      },
+      {
+        name: "Multiple Selection",
+        url: "/multiple-selection",
+        key: "multiple-selection",
+      },
     ],
   },
 ];

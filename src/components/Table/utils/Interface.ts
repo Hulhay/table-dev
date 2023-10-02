@@ -21,4 +21,6 @@ export interface ITableV2 {
   dataSource?: any[];
   resizable?: boolean;
   rearrangeColumnEnabled?: boolean;
+  selectionMode?: "single" | "multiselect";
+  subtleSelection?: boolean;
 }

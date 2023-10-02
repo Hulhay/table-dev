@@ -3,9 +3,11 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   BasicUncontrolled,
   Home,
+  MultipleSelection,
   NotFound,
   RearrangeColumn,
   Resize,
+  SingleSelection,
   Sorting,
 } from "../pages";
 import Layout from "./Layout";
@@ -36,6 +38,14 @@ const Navigations = createBrowserRouter([
         path: "rearrange-column",
         element: <RearrangeColumn />,
       },
+      {
+        path: "single-selection",
+        element: <SingleSelection />,
+      },
+      {
+        path: "multiple-selection",
+        element: <MultipleSelection />
+      }
     ],
   },
 ]);
