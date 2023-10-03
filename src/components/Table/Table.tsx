@@ -27,7 +27,7 @@ import {
   GetColumnKeyShow,
   GetTableColumnSizingOptions,
   Reorder,
-  TitleCase,
+  SetDisplayColumns,
 } from "./utils/Helper";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -165,30 +165,13 @@ const TableV2: React.FC<ITableV2> = (props) => {
         return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
       });
 
-      const newColumns = [...defaultColumns];
-      const selectedItemKey = checkedItems[0];
-      if (defaultRenderColumn.includes(selectedItemKey)) {
-        const foundItem = (props.defaultColumns || props.columns)?.find(
-          (obj) => obj.key === selectedItemKey
-        );
-
-        if (foundItem) {
-          newColumns.push({
-            key: foundItem.key,
-            label: TitleCase(foundItem.label),
-            dataIndex: foundItem.dataIndex,
-            compare: foundItem.compare,
-            onRenderDataSource: foundItem.onRenderDataSource,
-          });
-        }
-      } else {
-        newColumns.push({
-          key: checkedItems[0],
-          label: TitleCase(checkedItems[0]),
-          dataIndex: checkedItems[0],
-        });
-      }
-      setDefaultColumns(newColumns);
+      const newDisplayColumns = SetDisplayColumns(
+        defaultColumns,
+        checkedItems[0],
+        defaultRenderColumn,
+        props.defaultColumns || props.columns
+      );
+      setDefaultColumns(newDisplayColumns);
 
       return;
     }
@@ -264,15 +247,15 @@ const TableV2: React.FC<ITableV2> = (props) => {
           {/* Table Body */}
           <TableBody>
             {props.loading ? (
-                <TableCell
-                  colSpan={
-                    props.selectionMode
-                      ? defaultColumns.length + 1
-                      : defaultColumns.length
-                  }
-                >
-                  <Spinner size="extra-small"/>
-                </TableCell>
+              <TableCell
+                colSpan={
+                  props.selectionMode
+                    ? defaultColumns.length + 1
+                    : defaultColumns.length
+                }
+              >
+                <Spinner size="extra-small" />
+              </TableCell>
             ) : (
               <>
                 {rows.map(({ item, selected, onClick, appearance }, index) => {

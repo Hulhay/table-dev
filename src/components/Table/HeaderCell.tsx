@@ -1,7 +1,6 @@
 import React from "react";
 import { HeaderTableCellProps } from "./utils/Interface";
 import { Label } from "@fluentui/react-components";
-// import { ArrowSort16Regular } from "@fluentui/react-icons";
 import { useDrag, useDrop } from "react-dnd";
 import { ArrowSort16Regular } from "@fluentui/react-icons";
 

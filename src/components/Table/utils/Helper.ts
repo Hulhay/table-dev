@@ -82,3 +82,33 @@ export const GetColumnKeyHidden = (
   });
   return columnHidden;
 };
+
+export const SetDisplayColumns = (
+  prevColumn: ITableV2Column[],
+  checkedItem: string,
+  initialColumnKeys: string[],
+  initialColumns?: ITableV2Column[]
+): ITableV2Column[] => {
+  const newColumns = [...prevColumn];
+  if (initialColumnKeys.includes(checkedItem)) {
+    const foundItem = initialColumns?.find((obj) => obj.key === checkedItem);
+
+    if (foundItem) {
+      newColumns.push({
+        key: foundItem.key,
+        label: TitleCase(foundItem.label),
+        dataIndex: foundItem.dataIndex,
+        compare: foundItem.compare,
+        onRenderDataSource: foundItem.onRenderDataSource,
+      });
+    }
+  } else {
+    newColumns.push({
+      key: checkedItem,
+      label: TitleCase(checkedItem),
+      dataIndex: checkedItem,
+    });
+  }
+
+  return newColumns;
+};
