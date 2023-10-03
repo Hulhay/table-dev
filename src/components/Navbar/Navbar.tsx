@@ -18,7 +18,7 @@ const navLink: INavLinkGroup[] = [
         key: "basic-uncontrolled",
       },
       {
-        name: "Sorting",
+        name: "Sorting Uncontrolled",
         url: "/sorting",
         key: "sorting",
       },
@@ -43,9 +43,19 @@ const navLink: INavLinkGroup[] = [
         key: "single-selection",
       },
       {
+        name: "Single Selection Controlled",
+        url: "/single-selection-controlled",
+        key: "single-selection-controlled",
+      },
+      {
         name: "Multiple Selection Uncontrolled",
         url: "/multiple-selection",
         key: "multiple-selection",
+      },
+      {
+        name: "Multiple Selection Controlled",
+        url: "/multiple-selection-controlled",
+        key: "multiple-selection-controlled",
       },
       {
         name: "Setting Show Column Uncontrolled",

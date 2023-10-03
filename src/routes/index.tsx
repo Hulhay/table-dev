@@ -5,11 +5,13 @@ import {
   Home,
   LoadingState,
   MultipleSelection,
+  MultipleSelectionControlled,
   NotFound,
   RearrangeColumn,
   Resize,
   SettingShowColumn,
   SingleSelection,
+  SingleSelectionControlled,
   Sorting,
   SortingControlled,
 } from "../pages";
@@ -35,7 +37,7 @@ const Navigations = createBrowserRouter([
       },
       {
         path: "sorting-controlled",
-        element: <SortingControlled />
+        element: <SortingControlled />,
       },
       {
         path: "resize",
@@ -50,8 +52,16 @@ const Navigations = createBrowserRouter([
         element: <SingleSelection />,
       },
       {
+        path: "single-selection-controlled",
+        element: <SingleSelectionControlled />,
+      },
+      {
         path: "multiple-selection",
         element: <MultipleSelection />,
+      },
+      {
+        path: "multiple-selection-controlled",
+        element: <MultipleSelectionControlled />
       },
       {
         path: "setting-show-column",

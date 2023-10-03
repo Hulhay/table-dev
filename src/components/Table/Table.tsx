@@ -106,6 +106,16 @@ const TableV2: React.FC<ITableV2> = (props) => {
       useTableSelection({
         selectionMode:
           props.selectionMode !== undefined ? props.selectionMode : "single",
+        selectedItems:
+          props.selectedRowsIndex && new Set(props.selectedRowsIndex),
+        onSelectionChange: props.onSelectedRowsIndexChange
+          ? (_, data) => {
+              const rowIndex = Array.from(data.selectedItems).map((item) =>
+                parseInt(item.toString())
+              );
+              props.onSelectedRowsIndexChange?.(rowIndex);
+            }
+          : undefined,
       }),
     ]
   );

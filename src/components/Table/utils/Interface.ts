@@ -44,6 +44,8 @@ export interface ITableV2 {
   rearrangeColumnEnabled?: boolean;
   selectionMode?: "single" | "multiselect";
   subtleSelection?: boolean;
+  selectedRowsIndex?: number[];
+  onSelectedRowsIndexChange?: (rowsIndex?: number[]) => void;
   settingShowColumnEnabled?: boolean;
   loading?: boolean;
 }

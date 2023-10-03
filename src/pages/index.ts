@@ -6,6 +6,8 @@ export { SortingControlled } from "./SortingControlled";
 export { Resize } from "./Resize";
 export { RearrangeColumn } from "./RearrangeColumn";
 export { SingleSelection } from "./SingleSelection";
+export { SingleSelectionControlled } from "./SingleSelectionControlled";
 export { MultipleSelection } from "./MultipleSelection";
+export { MultipleSelectionControlled } from "./MultipleSelectionControlled";
 export { SettingShowColumn } from "./SettingShowColumn";
 export { LoadingState } from "./LoadingState";
