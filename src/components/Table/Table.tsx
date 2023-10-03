@@ -7,7 +7,6 @@ import {
   MenuPopover,
   MenuProps,
   MenuTrigger,
-  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -33,6 +32,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import HeaderCell from "./HeaderCell";
 import ShowHideColumn from "./ShowHideColumn";
+import LoadingState from "./LoadingState";
 
 const TableV2: React.FC<ITableV2> = (props) => {
   const defaultDisplayColumn = props.defaultColumns
@@ -145,11 +145,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
   );
 
   const moveColumn = (sourceIndex: number, destinationIndex: number) => {
-    const newOrderHeader = Reorder(
-      columnsData,
-      sourceIndex,
-      destinationIndex
-    );
+    const newOrderHeader = Reorder(columnsData, sourceIndex, destinationIndex);
 
     props.defaultColumns && setDefaultColumns(newOrderHeader);
     props.columns &&
@@ -161,7 +157,10 @@ const TableV2: React.FC<ITableV2> = (props) => {
       );
   };
 
-  const columnsShow = useMemo(() => GetColumnKeyShow(columnsData), [columnsData]);
+  const columnsShow = useMemo(
+    () => GetColumnKeyShow(columnsData),
+    [columnsData]
+  );
   const columnsHidden = useMemo(
     () => GetColumnKeyHidden(columnsShow, defaultDataSource),
     []
@@ -294,15 +293,13 @@ const TableV2: React.FC<ITableV2> = (props) => {
           {/* Table Body */}
           <TableBody>
             {props.loading ? (
-              <TableCell
-                colSpan={
+              <LoadingState
+                colspan={
                   props.selectionMode
                     ? columnsData.length + 1
                     : columnsData.length
                 }
-              >
-                <Spinner size="extra-small" />
-              </TableCell>
+              />
             ) : (
               <>
                 {rows.map(({ item, selected, onClick, appearance }, index) => {

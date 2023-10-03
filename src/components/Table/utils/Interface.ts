@@ -3,6 +3,10 @@ import {
   MenuCheckedValueChangeEvent,
 } from "@fluentui/react-components";
 
+export interface LoadingStateTableProps {
+  colspan: number;
+}
+
 export interface HeaderTableCellProps {
   column: ITableV2Column;
   index: number;
