@@ -35,7 +35,7 @@ import HeaderCell from "./HeaderCell";
 import ShowHideColumn from "./ShowHideColumn";
 
 const TableV2: React.FC<ITableV2> = (props) => {
-  const defaultRenderColumn = props.defaultColumns
+  const defaultDisplayColumn = props.defaultColumns
     ? props.defaultColumns.map((obj) => obj.key)
     : props.columns
     ? props.columns.map((obj) => obj.key)
@@ -44,13 +44,15 @@ const TableV2: React.FC<ITableV2> = (props) => {
   const [defaultColumns, setDefaultColumns] = useState<ITableV2Column[]>(
     props.defaultColumns || props.columns || []
   );
-
-  const defaultDataSource = props.defaultDataSource || props.dataSource || [];
+  const [defaultDataSource] = useState(
+    props.defaultDataSource || props.dataSource || []
+  );
+  
   const [columnSizingOptions] = useState(
     GetTableColumnSizingOptions(defaultColumns)
   );
 
-  const sortableCols = defaultColumns.filter(
+  const sortableColumns = defaultColumns.filter(
     (col) => col.compare !== undefined
   );
 
@@ -75,7 +77,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
       useTableColumnSizing_unstable({ columnSizingOptions }),
       useTableSort({
         defaultSortState: {
-          sortColumn: sortableCols.length > 0 ? sortableCols[0].key : undefined,
+          sortColumn:
+            sortableColumns.length > 0 ? sortableColumns[0].key : undefined,
           sortDirection: "ascending",
         },
       }),
@@ -168,7 +171,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
       const newDisplayColumns = SetDisplayColumns(
         defaultColumns,
         checkedItems[0],
-        defaultRenderColumn,
+        defaultDisplayColumn,
         props.defaultColumns || props.columns
       );
       setDefaultColumns(newDisplayColumns);
