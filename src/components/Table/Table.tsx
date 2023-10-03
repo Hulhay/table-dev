@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
   Menu,
@@ -113,8 +113,11 @@ const TableV2: React.FC<ITableV2> = (props) => {
     setDefaultColumns(newOrderHeader);
   };
 
-  const columnsShow = GetColumnKeyShow(defaultColumns);
-  const columnsHidden = GetColumnKeyHidden(columnsShow, defaultDataSource);
+  const columnsShow = useMemo(() => GetColumnKeyShow(defaultColumns), []);
+  const columnsHidden = useMemo(
+    () => GetColumnKeyHidden(columnsShow, defaultDataSource),
+    []
+  );
 
   const [checkedValues, setCheckedValues] = useState<Record<string, string[]>>({
     show: columnsShow,
@@ -156,10 +159,10 @@ const TableV2: React.FC<ITableV2> = (props) => {
         (item) => !checkedItems.includes(item)
       );
 
+      setUncheckedValues({ hidden: newUncheckedValues });
       setCheckedValues((prev) => {
         return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
       });
-      setUncheckedValues({ hidden: newUncheckedValues });
 
       const newColumns = [...defaultColumns];
       const selectedItemKey = checkedItems[0];
