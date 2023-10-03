@@ -301,7 +301,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                 }
               />
             ) : (
-              <>
+              <React.Fragment>
                 {rows.map(({ item, selected, onClick, appearance }, index) => {
                   return (
                     <TableRow
@@ -338,7 +338,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                     </TableRow>
                   );
                 })}
-              </>
+              </React.Fragment>
             )}
           </TableBody>
         </Table>
