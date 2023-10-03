@@ -37,11 +37,11 @@ export const GetTableColumnSizingOptions = (
   return columnSizingOptions;
 };
 
-export const Reorder = (
-  list: any[],
+export const Reorder = <T>(
+  list: T[],
   sourceIndex: number,
   destinationIndex: number
-) => {
+): T[] => {
   const result = [...list];
   const [removed] = result.splice(sourceIndex, 1);
   result.splice(destinationIndex, 0, removed);

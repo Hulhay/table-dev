@@ -42,6 +42,12 @@ export interface ITableV2 {
   onSortChange?: (sort?: ISort) => void;
   resizable?: boolean;
   rearrangeColumnEnabled?: boolean;
+  onRearrangeColumn?: (
+    newColumns?: ITableV2Column[],
+    columnKey?: string,
+    sourceIndex?: number,
+    destinationIndex?: number
+  ) => void;
   selectionMode?: "single" | "multiselect";
   subtleSelection?: boolean;
   selectedRowsIndex?: number[];

@@ -38,6 +38,11 @@ const navLink: INavLinkGroup[] = [
         key: "rearrange-column",
       },
       {
+        name: "Rearrange Column Controlled",
+        url: "/rearrange-column-controlled",
+        key: "rearrange-column-controlled",
+      },
+      {
         name: "Single Selection Uncontrolled",
         url: "/single-selection",
         key: "single-selection",

@@ -42,17 +42,19 @@ const TableV2: React.FC<ITableV2> = (props) => {
     : [];
 
   const [defaultColumns, setDefaultColumns] = useState<ITableV2Column[]>(
-    props.defaultColumns || props.columns || []
+    props.defaultColumns || []
   );
+  const columnsData = props.columns || defaultColumns;
+
   const [defaultDataSource] = useState(
     props.defaultDataSource || props.dataSource || []
   );
 
   const [columnSizingOptions] = useState(
-    GetTableColumnSizingOptions(defaultColumns)
+    GetTableColumnSizingOptions(columnsData)
   );
 
-  const sortableColumns = defaultColumns.filter(
+  const sortableColumns = columnsData.filter(
     (col) => col.compare !== undefined
   );
 
@@ -70,7 +72,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     },
   } = useTableFeatures(
     {
-      columns: CreateColumnHeader(defaultColumns),
+      columns: CreateColumnHeader(columnsData),
       items: defaultDataSource,
     },
     [
@@ -142,12 +144,24 @@ const TableV2: React.FC<ITableV2> = (props) => {
     })
   );
 
-  const moveColumn = (fromIndex: number, toIndex: number) => {
-    const newOrderHeader = Reorder(defaultColumns, fromIndex, toIndex);
-    setDefaultColumns(newOrderHeader);
+  const moveColumn = (sourceIndex: number, destinationIndex: number) => {
+    const newOrderHeader = Reorder(
+      columnsData,
+      sourceIndex,
+      destinationIndex
+    );
+
+    props.defaultColumns && setDefaultColumns(newOrderHeader);
+    props.columns &&
+      props.onRearrangeColumn?.(
+        newOrderHeader,
+        columnsData[sourceIndex].key,
+        sourceIndex,
+        destinationIndex
+      );
   };
 
-  const columnsShow = useMemo(() => GetColumnKeyShow(defaultColumns), []);
+  const columnsShow = useMemo(() => GetColumnKeyShow(columnsData), [columnsData]);
   const columnsHidden = useMemo(
     () => GetColumnKeyHidden(columnsShow, defaultDataSource),
     []
@@ -179,7 +193,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
         return prev ? { ...prev, ["hidden"]: hidden } : { ["hidden"]: hidden };
       });
 
-      const newColumns = defaultColumns.filter((item) =>
+      const newColumns = columnsData.filter((item) =>
         checked.includes(item.key)
       );
       setDefaultColumns(newColumns);
@@ -199,7 +213,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
       });
 
       const newDisplayColumns = SetDisplayColumns(
-        defaultColumns,
+        columnsData,
         checkedItems[0],
         defaultDisplayColumn,
         props.defaultColumns || props.columns
@@ -237,7 +251,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                   onClick={toggleAllRows}
                 />
               )}
-              {defaultColumns.map((column: ITableV2Column, index: number) => {
+              {columnsData.map((column: ITableV2Column, index: number) => {
                 return (
                   <Menu openOnContext key={column.key}>
                     <MenuTrigger>
@@ -283,8 +297,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
               <TableCell
                 colSpan={
                   props.selectionMode
-                    ? defaultColumns.length + 1
-                    : defaultColumns.length
+                    ? columnsData.length + 1
+                    : columnsData.length
                 }
               >
                 <Spinner size="extra-small" />
@@ -310,7 +324,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                           checked={selected}
                         />
                       )}
-                      {defaultColumns.map((column: ITableV2Column) => {
+                      {columnsData.map((column: ITableV2Column) => {
                         return (
                           <TableCell
                             key={item[column.dataIndex || column.key]}

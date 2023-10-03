@@ -8,6 +8,7 @@ import {
   MultipleSelectionControlled,
   NotFound,
   RearrangeColumn,
+  RearrangeColumnControlled,
   Resize,
   SettingShowColumn,
   SingleSelection,
@@ -46,6 +47,10 @@ const Navigations = createBrowserRouter([
       {
         path: "rearrange-column",
         element: <RearrangeColumn />,
+      },
+      {
+        path: "rearrange-column-controlled",
+        element: <RearrangeColumnControlled />
       },
       {
         path: "single-selection",

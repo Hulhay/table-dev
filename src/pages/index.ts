@@ -5,6 +5,7 @@ export { Sorting } from "./Sorting";
 export { SortingControlled } from "./SortingControlled";
 export { Resize } from "./Resize";
 export { RearrangeColumn } from "./RearrangeColumn";
+export { RearrangeColumnControlled } from "./RearrangeColumnControlled";
 export { SingleSelection } from "./SingleSelection";
 export { SingleSelectionControlled } from "./SingleSelectionControlled";
 export { MultipleSelection } from "./MultipleSelection";
