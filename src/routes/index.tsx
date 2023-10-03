@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   BasicUncontrolled,
   Home,
+  LoadingState,
   MultipleSelection,
   NotFound,
   RearrangeColumn,
@@ -50,6 +51,10 @@ const Navigations = createBrowserRouter([
       {
         path: "setting-show-column",
         element: <SettingShowColumn />,
+      },
+      {
+        path: "loading-state",
+        element: <LoadingState />,
       },
     ],
   },

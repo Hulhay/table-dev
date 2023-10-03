@@ -38,4 +38,5 @@ export interface ITableV2 {
   selectionMode?: "single" | "multiselect";
   subtleSelection?: boolean;
   settingShowColumnEnabled?: boolean;
+  loading?: boolean;
 }

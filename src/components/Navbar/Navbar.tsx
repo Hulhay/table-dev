@@ -47,6 +47,11 @@ const navLink: INavLinkGroup[] = [
         url: "/setting-show-column",
         key: "setting-show-column",
       },
+      {
+        name: "Loading State",
+        url: "/loading-state",
+        key: "loading-state",
+      },
     ],
   },
 ];

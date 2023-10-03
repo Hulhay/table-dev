@@ -7,3 +7,4 @@ export { RearrangeColumn } from "./RearrangeColumn";
 export { SingleSelection } from "./SingleSelection";
 export { MultipleSelection } from "./MultipleSelection";
 export { SettingShowColumn } from "./SettingShowColumn";
+export { LoadingState } from "./LoadingState";

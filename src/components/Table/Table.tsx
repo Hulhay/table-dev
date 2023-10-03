@@ -7,6 +7,7 @@ import {
   MenuPopover,
   MenuProps,
   MenuTrigger,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -262,38 +263,56 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
           {/* Table Body */}
           <TableBody>
-            {rows.map(({ item, selected, onClick, appearance }, index) => {
-              return (
-                <TableRow
-                  key={index}
-                  tabIndex={index}
-                  onClick={onClick}
-                  appearance={appearance}
+            {props.loading ? (
+                <TableCell
+                  colSpan={
+                    props.selectionMode
+                      ? defaultColumns.length + 1
+                      : defaultColumns.length
+                  }
                 >
-                  {props.selectionMode && (
-                    <TableSelectionCell
-                      subtle={props.subtleSelection}
-                      type={
-                        props.selectionMode === "single" ? "radio" : "checkbox"
-                      }
-                      checked={selected}
-                    />
-                  )}
-                  {defaultColumns.map((column: ITableV2Column) => {
-                    return (
-                      <TableCell
-                        key={item[column.dataIndex || column.key]}
-                        {...columnSizing_unstable.getTableCellProps(column.key)}
-                      >
-                        {column.onRenderDataSource
-                          ? column.onRenderDataSource(item)
-                          : item[column.dataIndex || ""]}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+                  <Spinner size="extra-small"/>
+                </TableCell>
+            ) : (
+              <>
+                {rows.map(({ item, selected, onClick, appearance }, index) => {
+                  return (
+                    <TableRow
+                      key={index}
+                      tabIndex={index}
+                      onClick={onClick}
+                      appearance={appearance}
+                    >
+                      {props.selectionMode && (
+                        <TableSelectionCell
+                          subtle={props.subtleSelection}
+                          type={
+                            props.selectionMode === "single"
+                              ? "radio"
+                              : "checkbox"
+                          }
+                          checked={selected}
+                        />
+                      )}
+                      {defaultColumns.map((column: ITableV2Column) => {
+                        return (
+                          <TableCell
+                            key={item[column.dataIndex || column.key]}
+                            {...columnSizing_unstable.getTableCellProps(
+                              column.key
+                            )}
+                          >
+                            {column.onRenderDataSource
+                              ? column.onRenderDataSource(item)
+                              : item[column.dataIndex || ""]}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+              </>
+            )}
           </TableBody>
         </Table>
       </DndProvider>
