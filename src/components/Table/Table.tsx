@@ -5,6 +5,7 @@ import {
   MenuItem,
   MenuList,
   MenuPopover,
+  MenuProps,
   MenuTrigger,
   Table,
   TableBody,
@@ -21,14 +22,24 @@ import {
 } from "@fluentui/react-components";
 import {
   CreateColumnHeader,
+  GetColumnKeyHidden,
+  GetColumnKeyShow,
   GetTableColumnSizingOptions,
   Reorder,
+  TitleCase,
 } from "./utils/Helper";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import HeaderCell from "./HeaderCell";
+import ShowHideColumn from "./ShowHideColumn";
 
 const TableV2: React.FC<ITableV2> = (props) => {
+  const defaultRenderColumn = props.defaultColumns
+    ? props.defaultColumns.map((obj) => obj.key)
+    : props.columns
+    ? props.columns.map((obj) => obj.key)
+    : [];
+
   const [defaultColumns, setDefaultColumns] = useState<ITableV2Column[]>(
     props.defaultColumns || props.columns || []
   );
@@ -102,100 +113,188 @@ const TableV2: React.FC<ITableV2> = (props) => {
     setDefaultColumns(newOrderHeader);
   };
 
+  const columnsShow = GetColumnKeyShow(defaultColumns);
+  const columnsHidden = GetColumnKeyHidden(columnsShow, defaultDataSource);
+
+  const [checkedValues, setCheckedValues] = useState<Record<string, string[]>>({
+    show: columnsShow,
+  });
+  const [unCheckedValues, setUncheckedValues] = useState<
+    Record<string, string[]>
+  >({
+    hidden: columnsHidden,
+  });
+  const onCheckedValueChange: MenuProps["onCheckedValueChange"] = (
+    _,
+    { name, checkedItems }
+  ) => {
+    const { show } = checkedValues;
+    const { hidden } = unCheckedValues;
+
+    if (name === "show") {
+      const checked = show.filter((item) => checkedItems.includes(item));
+      const unchecked = show.filter((item) => !checkedItems.includes(item));
+
+      hidden.push(...unchecked);
+
+      setCheckedValues({ show: checked });
+      setUncheckedValues((prev) => {
+        return prev ? { ...prev, ["hidden"]: hidden } : { ["hidden"]: hidden };
+      });
+
+      const newColumns = defaultColumns.filter((item) =>
+        checked.includes(item.key)
+      );
+      setDefaultColumns(newColumns);
+
+      return;
+    }
+
+    if (name === "hidden") {
+      show.push(...checkedItems);
+      const newUncheckedValues = hidden.filter(
+        (item) => !checkedItems.includes(item)
+      );
+
+      setCheckedValues((prev) => {
+        return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
+      });
+      setUncheckedValues({ hidden: newUncheckedValues });
+
+      const newColumns = [...defaultColumns];
+      const selectedItemKey = checkedItems[0];
+      if (defaultRenderColumn.includes(selectedItemKey)) {
+        const foundItem = (props.defaultColumns || props.columns)?.find(
+          (obj) => obj.key === selectedItemKey
+        );
+
+        if (foundItem) {
+          newColumns.push({
+            key: foundItem.key,
+            label: TitleCase(foundItem.label),
+            dataIndex: foundItem.dataIndex,
+            compare: foundItem.compare,
+            onRenderDataSource: foundItem.onRenderDataSource,
+          });
+        }
+      } else {
+        newColumns.push({
+          key: checkedItems[0],
+          label: TitleCase(checkedItems[0]),
+          dataIndex: checkedItems[0],
+        });
+      }
+      setDefaultColumns(newColumns);
+
+      return;
+    }
+  };
+
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Table
-        ref={props.resizable === false ? undefined : tableRef}
-        {...columnSizing_unstable.getTableProps()}
-      >
-        {/* Table Header */}
-        <TableHeader>
-          <TableRow style={{ backgroundColor: "#eeeeee" }}>
-            {props.selectionMode && (
-              <TableSelectionCell
-                type={props.selectionMode === "single" ? "radio" : "checkbox"}
-                checked={
-                  allRowsSelected ? true : someRowsSelected ? "mixed" : false
-                }
-                hidden={props.selectionMode !== "multiselect"}
-                onClick={toggleAllRows}
-              />
-            )}
-            {defaultColumns.map((column: ITableV2Column, index: number) => {
-              return (
-                <Menu openOnContext key={column.key}>
-                  <MenuTrigger>
-                    <TableHeaderCell
-                      key={column.key}
-                      tabIndex={index}
-                      {...columnSizing_unstable.getTableHeaderCellProps(
-                        column.key
-                      )}
-                      {...(column.compare && headerSortProps(column.key))}
-                    >
-                      <HeaderCell
-                        column={column}
-                        index={index}
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {props.settingShowColumnEnabled && (
+        <ShowHideColumn
+          checkedValues={checkedValues}
+          uncheckedValues={unCheckedValues}
+          onCheckedValueChange={onCheckedValueChange}
+        />
+      )}
+      <DndProvider backend={HTML5Backend}>
+        <Table
+          ref={props.resizable === false ? undefined : tableRef}
+          {...columnSizing_unstable.getTableProps()}
+        >
+          {/* Table Header */}
+          <TableHeader>
+            <TableRow style={{ backgroundColor: "#eeeeee" }}>
+              {props.selectionMode && (
+                <TableSelectionCell
+                  type={props.selectionMode === "single" ? "radio" : "checkbox"}
+                  checked={
+                    allRowsSelected ? true : someRowsSelected ? "mixed" : false
+                  }
+                  hidden={props.selectionMode !== "multiselect"}
+                  onClick={toggleAllRows}
+                />
+              )}
+              {defaultColumns.map((column: ITableV2Column, index: number) => {
+                return (
+                  <Menu openOnContext key={column.key}>
+                    <MenuTrigger>
+                      <TableHeaderCell
                         key={column.key}
-                        moveColumn={moveColumn}
-                        rearrangeColumnEnabled={
-                          props.rearrangeColumnEnabled === true ? true : false
-                        }
-                      />
-                    </TableHeaderCell>
-                  </MenuTrigger>
-                  <MenuPopover>
-                    <MenuList>
-                      <MenuItem
-                        onClick={columnSizing_unstable.enableKeyboardMode(
+                        tabIndex={index}
+                        {...columnSizing_unstable.getTableHeaderCellProps(
                           column.key
                         )}
+                        {...(column.compare && headerSortProps(column.key))}
                       >
-                        Keyboard Column Resizing
-                      </MenuItem>
-                    </MenuList>
-                  </MenuPopover>
-                </Menu>
+                        <HeaderCell
+                          column={column}
+                          index={index}
+                          key={column.key}
+                          moveColumn={moveColumn}
+                          rearrangeColumnEnabled={
+                            props.rearrangeColumnEnabled === true ? true : false
+                          }
+                        />
+                      </TableHeaderCell>
+                    </MenuTrigger>
+                    <MenuPopover>
+                      <MenuList>
+                        <MenuItem
+                          onClick={columnSizing_unstable.enableKeyboardMode(
+                            column.key
+                          )}
+                        >
+                          Keyboard Column Resizing
+                        </MenuItem>
+                      </MenuList>
+                    </MenuPopover>
+                  </Menu>
+                );
+              })}
+            </TableRow>
+          </TableHeader>
+
+          {/* Table Body */}
+          <TableBody>
+            {rows.map(({ item, selected, onClick, appearance }, index) => {
+              return (
+                <TableRow
+                  key={index}
+                  tabIndex={index}
+                  onClick={onClick}
+                  appearance={appearance}
+                >
+                  {props.selectionMode && (
+                    <TableSelectionCell
+                      subtle={props.subtleSelection}
+                      type={
+                        props.selectionMode === "single" ? "radio" : "checkbox"
+                      }
+                      checked={selected}
+                    />
+                  )}
+                  {defaultColumns.map((column: ITableV2Column) => {
+                    return (
+                      <TableCell
+                        key={item[column.dataIndex || column.key]}
+                        {...columnSizing_unstable.getTableCellProps(column.key)}
+                      >
+                        {column.onRenderDataSource
+                          ? column.onRenderDataSource(item)
+                          : item[column.dataIndex || ""]}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
               );
             })}
-          </TableRow>
-        </TableHeader>
-
-        {/* Table Body */}
-        <TableBody>
-          {rows.map(({ item, selected, onClick, appearance }, index) => {
-            return (
-              <TableRow
-                key={index}
-                tabIndex={index}
-                onClick={onClick}
-                appearance={appearance}
-              >
-                {props.selectionMode && (
-                  <TableSelectionCell
-                    subtle={props.subtleSelection}
-                    type={props.selectionMode === "single" ? "radio" : "checkbox"}
-                    checked={selected}
-                  />
-                )}
-                {defaultColumns.map((column: ITableV2Column) => {
-                  return (
-                    <TableCell
-                      key={item[column.dataIndex || column.key]}
-                      {...columnSizing_unstable.getTableCellProps(column.key)}
-                    >
-                      {column.onRenderDataSource
-                        ? column.onRenderDataSource(item)
-                        : item[column.dataIndex || ""]}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </DndProvider>
+          </TableBody>
+        </Table>
+      </DndProvider>
+    </div>
   );
 };
 

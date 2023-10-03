@@ -1,8 +1,22 @@
+import {
+  MenuCheckedValueChangeData,
+  MenuCheckedValueChangeEvent,
+} from "@fluentui/react-components";
+
 export interface HeaderTableCellProps {
   column: ITableV2Column;
   index: number;
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
   rearrangeColumnEnabled: boolean;
+}
+
+export interface ShowColumnTableProps {
+  checkedValues: Record<string, string[]>;
+  uncheckedValues: Record<string, string[]>;
+  onCheckedValueChange: (
+    e: MenuCheckedValueChangeEvent,
+    data: MenuCheckedValueChangeData
+  ) => void;
 }
 
 export interface ITableV2Column {
@@ -23,4 +37,5 @@ export interface ITableV2 {
   rearrangeColumnEnabled?: boolean;
   selectionMode?: "single" | "multiselect";
   subtleSelection?: boolean;
+  settingShowColumnEnabled?: boolean;
 }

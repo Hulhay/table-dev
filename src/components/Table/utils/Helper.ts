@@ -48,3 +48,37 @@ export const Reorder = (
 
   return result;
 };
+
+export const TitleCase = (
+  str: string,
+  charJoin?: string,
+  splitChar?: string
+) => {
+  const strSlice = str.toLowerCase().split(splitChar || " ");
+  const stringJoin = charJoin || " ";
+
+  const final = [];
+
+  for (const word of strSlice) {
+    final.push(word.charAt(0).toUpperCase() + word.slice(1));
+  }
+
+  return final.join(stringJoin);
+};
+
+export const GetColumnKeyShow = (column: ITableV2Column[]): string[] => {
+  return column.map((obj) => obj.key);
+};
+
+export const GetColumnKeyHidden = (
+  columnShow: string[],
+  dataSource: any[]
+): string[] => {
+  const columnHidden: string[] = [];
+  Object.keys(dataSource[0]).forEach((field) => {
+    if (!columnShow.includes(field)) {
+      columnHidden.push(field);
+    }
+  });
+  return columnHidden;
+};

@@ -4,4 +4,6 @@ export interface IDataSourceBasic {
   status: string;
   priority: string;
   assignee: string;
+  createdBy: string;
+  domain: string;
 }

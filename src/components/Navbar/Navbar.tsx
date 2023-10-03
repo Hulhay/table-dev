@@ -42,6 +42,11 @@ const navLink: INavLinkGroup[] = [
         url: "/multiple-selection",
         key: "multiple-selection",
       },
+      {
+        name: "Setting Show Column Uncontrolled",
+        url: "/setting-show-column",
+        key: "setting-show-column",
+      },
     ],
   },
 ];

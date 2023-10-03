@@ -135,6 +135,39 @@ export const columnsWidthDummy: ITableV2Column[] = [
   },
 ];
 
+export const columnsDummyNoAction: ITableV2Column[] = [
+  {
+    key: "title",
+    label: "Title",
+    dataIndex: "title",
+  },
+  {
+    key: "assignee",
+    label: "Assignee",
+    dataIndex: "assignee",
+  },
+  {
+    key: "priority",
+    label: "Priority",
+    dataIndex: "priority",
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.priority.localeCompare(b.priority);
+    },
+    onRenderDataSource: (data: IDataSourceBasic) => titleCase(data.priority),
+  },
+  {
+    key: "status",
+    label: "Status",
+    dataIndex: "status",
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.status.localeCompare(b.status);
+    },
+    onRenderDataSource: (data: IDataSourceBasic) => {
+      return <Status status={data.status} />;
+    },
+  },
+];
+
 export const dataSourceDummy: IDataSourceBasic[] = [
   {
     id: "task-1",
@@ -142,6 +175,8 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     title: "Task 1",
     priority: "low",
     assignee: "Sandra",
+    createdBy: "Admin",
+    domain: "BE",
   },
   {
     id: "task-2",
@@ -149,6 +184,8 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     title: "Task 2",
     priority: "low",
     assignee: "Sandra",
+    createdBy: "PM",
+    domain: "BE",
   },
   {
     id: "task-3",
@@ -156,6 +193,8 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     title: "Task 3",
     priority: "medium",
     assignee: "Poy",
+    createdBy: "Admin",
+    domain: "BE",
   },
   {
     id: "task-4",
@@ -163,6 +202,8 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     title: "Task 4",
     priority: "high",
     assignee: "Poy",
+    createdBy: "Tech Lead",
+    domain: "FE",
   },
   {
     id: "task-5",
@@ -170,6 +211,8 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     title: "Task 5",
     priority: "low",
     assignee: "Abe",
+    createdBy: "Admin",
+    domain: "BE",
   },
   {
     id: "task-6",
@@ -177,6 +220,8 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     title: "Task 6",
     priority: "low",
     assignee: "Poy",
+    createdBy: "Tech Lead",
+    domain: "FE",
   },
   {
     id: "task-7",
@@ -184,5 +229,7 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     title: "Task 7",
     priority: "high",
     assignee: "Abe",
+    createdBy: "Admin",
+    domain: "BE",
   },
 ];

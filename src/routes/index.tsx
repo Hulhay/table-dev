@@ -7,6 +7,7 @@ import {
   NotFound,
   RearrangeColumn,
   Resize,
+  SettingShowColumn,
   SingleSelection,
   Sorting,
 } from "../pages";
@@ -44,8 +45,12 @@ const Navigations = createBrowserRouter([
       },
       {
         path: "multiple-selection",
-        element: <MultipleSelection />
-      }
+        element: <MultipleSelection />,
+      },
+      {
+        path: "setting-show-column",
+        element: <SettingShowColumn />,
+      },
     ],
   },
 ]);
