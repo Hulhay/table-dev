@@ -19,6 +19,11 @@ export interface ShowColumnTableProps {
   ) => void;
 }
 
+export interface ISort {
+  sortDirection?: "ascending" | "descending";
+  sortColumn?: string;
+}
+
 export interface ITableV2Column {
   key: string;
   label: string;
@@ -33,6 +38,8 @@ export interface ITableV2 {
   defaultDataSource?: any[];
   columns?: ITableV2Column[];
   dataSource?: any[];
+  sort?: ISort;
+  onSortChange?: (sort?: ISort) => void;
   resizable?: boolean;
   rearrangeColumnEnabled?: boolean;
   selectionMode?: "single" | "multiselect";

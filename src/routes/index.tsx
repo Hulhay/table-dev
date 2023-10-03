@@ -11,6 +11,7 @@ import {
   SettingShowColumn,
   SingleSelection,
   Sorting,
+  SortingControlled,
 } from "../pages";
 import Layout from "./Layout";
 
@@ -31,6 +32,10 @@ const Navigations = createBrowserRouter([
       {
         path: "sorting",
         element: <Sorting />,
+      },
+      {
+        path: "sorting-controlled",
+        element: <SortingControlled />
       },
       {
         path: "resize",

@@ -23,6 +23,11 @@ const navLink: INavLinkGroup[] = [
         key: "sorting",
       },
       {
+        name: "Sorting Controlled",
+        url: "/sorting-controlled",
+        key: "sorting-controlled",
+      },
+      {
         name: "Resize",
         url: "/resize",
         key: "resize",

@@ -47,7 +47,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
   const [defaultDataSource] = useState(
     props.defaultDataSource || props.dataSource || []
   );
-  
+
   const [columnSizingOptions] = useState(
     GetTableColumnSizingOptions(defaultColumns)
   );
@@ -76,11 +76,32 @@ const TableV2: React.FC<ITableV2> = (props) => {
     [
       useTableColumnSizing_unstable({ columnSizingOptions }),
       useTableSort({
-        defaultSortState: {
-          sortColumn:
-            sortableColumns.length > 0 ? sortableColumns[0].key : undefined,
-          sortDirection: "ascending",
-        },
+        defaultSortState:
+          props.sort === undefined
+            ? {
+                sortColumn:
+                  sortableColumns.length > 0
+                    ? sortableColumns[0].key
+                    : undefined,
+                sortDirection: "ascending",
+              }
+            : undefined,
+        sortState: props.sort
+          ? {
+              sortColumn: props.sort?.sortColumn,
+              sortDirection:
+                props.sort?.sortDirection === "ascending"
+                  ? "ascending"
+                  : "descending",
+            }
+          : undefined,
+        onSortChange: props.onSortChange
+          ? (_, nextSortState) =>
+              props.onSortChange?.({
+                sortColumn: nextSortState.sortColumn as string,
+                sortDirection: nextSortState.sortDirection,
+              })
+          : undefined,
       }),
       useTableSelection({
         selectionMode:
@@ -91,8 +112,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
   const headerSortProps = (columnId: TableColumnId) => ({
     onClick: (e: React.MouseEvent) => {
-      const column = defaultColumns.find((column) => column.key === columnId);
-      column?.compare && toggleColumnSort(e, columnId);
+      toggleColumnSort(e, columnId);
     },
     sortDirection: getSortDirection(columnId),
   });
