@@ -3,7 +3,7 @@ import {
   TableColumnSizingOptions,
   createTableColumn,
 } from "@fluentui/react-components";
-import { ITableV2Column } from "./Interface";
+import { ITableV2, ITableV2Column } from "./Interface";
 import { useMemo } from "react";
 
 export const CreateColumnHeader = (defaultColumns: ITableV2Column[]) =>
@@ -111,4 +111,10 @@ export const SetDisplayColumns = (
   }
 
   return newColumns;
+};
+
+export const ShowSettingButton = (props: ITableV2) => {
+  return (
+    props.settingShowColumnEnabled || props.settingGroupDataSourceEnabled
+  );
 };

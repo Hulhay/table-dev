@@ -28,12 +28,13 @@ import {
   GetTableColumnSizingOptions,
   Reorder,
   SetDisplayColumns,
+  ShowSettingButton,
 } from "./utils/Helper";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import HeaderCell from "./HeaderCell";
-import ShowHideColumn from "./ShowHideColumn";
 import LoadingState from "./LoadingState";
+import SettingButton from "./SettingButton";
 
 const TableV2: React.FC<ITableV2> = (props) => {
   const defaultDisplayColumn = props.defaultColumns
@@ -80,7 +81,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
       useTableColumnSizing_unstable({
         columnSizingOptions,
         onColumnResize: (_, { columnId, width }) => {
-          props.resizable && props.onResizeColumn?.(columnId as string, width)
+          props.resizable && props.onResizeColumn?.(columnId as string, width);
         },
       }),
       useTableSort({
@@ -175,7 +176,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
   const [checkedValues, setCheckedValues] = useState<Record<string, string[]>>({
     show: columnsShow,
   });
-  const [unCheckedValues, setUncheckedValues] = useState<
+  const [uncheckedValues, setuncheckedValues] = useState<
     Record<string, string[]>
   >({
     hidden: columnsHidden,
@@ -185,7 +186,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     { name, checkedItems }
   ) => {
     const { show } = checkedValues;
-    const { hidden } = unCheckedValues;
+    const { hidden } = uncheckedValues;
 
     if (name === "show") {
       const checked = show.filter((item) => checkedItems.includes(item));
@@ -194,7 +195,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
       hidden.push(...unchecked);
 
       setCheckedValues({ show: checked });
-      setUncheckedValues((prev) => {
+      setuncheckedValues((prev) => {
         return prev ? { ...prev, ["hidden"]: hidden } : { ["hidden"]: hidden };
       });
 
@@ -212,7 +213,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
         (item) => !checkedItems.includes(item)
       );
 
-      setUncheckedValues({ hidden: newUncheckedValues });
+      setuncheckedValues({ hidden: newUncheckedValues });
       setCheckedValues((prev) => {
         return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
       });
@@ -231,11 +232,16 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      {props.settingShowColumnEnabled && (
-        <ShowHideColumn
-          checkedValues={checkedValues}
-          uncheckedValues={unCheckedValues}
-          onCheckedValueChange={onCheckedValueChange}
+      {ShowSettingButton(props) && (
+        <SettingButton
+          settingShowColumnEnabled={
+            props.settingShowColumnEnabled === true ? true : false
+          }
+          showColumnTableProps={{
+            checkedValues,
+            uncheckedValues,
+            onCheckedValueChange,
+          }}
         />
       )}
       <DndProvider backend={HTML5Backend}>

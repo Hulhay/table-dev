@@ -1,9 +1,9 @@
 import {
-  Button,
   Menu,
   MenuDivider,
   MenuGroup,
   MenuGroupHeader,
+  MenuItem,
   MenuItemCheckbox,
   MenuList,
   MenuPopover,
@@ -21,7 +21,7 @@ const ShowHideColumn: React.FC<ShowColumnTableProps> = (props) => {
         onCheckedValueChange={props.onCheckedValueChange}
       >
         <MenuTrigger disableButtonEnhancement>
-          <Button>Show Column</Button>
+          <MenuItem>Show Column</MenuItem>
         </MenuTrigger>
 
         <MenuPopover>

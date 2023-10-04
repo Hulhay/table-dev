@@ -14,6 +14,11 @@ export interface HeaderTableCellProps {
   rearrangeColumnEnabled: boolean;
 }
 
+export interface SettingTableButtonProps {
+  settingShowColumnEnabled: boolean;
+  showColumnTableProps: ShowColumnTableProps;
+}
+
 export interface ShowColumnTableProps {
   checkedValues: Record<string, string[]>;
   uncheckedValues: Record<string, string[]>;
@@ -63,5 +68,7 @@ export interface ITableV2 {
   onSelectedRowsIndexChange?: (rowsIndex?: number[]) => void;
 
   settingShowColumnEnabled?: boolean;
+  settingGroupDataSourceEnabled?: boolean;
+
   loading?: boolean;
 }
