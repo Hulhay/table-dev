@@ -33,6 +33,11 @@ const navLink: INavLinkGroup[] = [
         key: "resize",
       },
       {
+        name: "Event onResizeColumn",
+        url: "/resize-controlled",
+        key: "resize-controlled",
+      },
+      {
         name: "Rearrange Column",
         url: "/rearrange-column",
         key: "rearrange-column",

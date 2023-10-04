@@ -11,6 +11,7 @@ import {
   TableBody,
   TableCell,
   TableColumnId,
+  TableColumnSizingOptions,
   TableHeader,
   TableHeaderCell,
   TableRow,
@@ -50,8 +51,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
     props.defaultDataSource || props.dataSource || []
   );
 
-  const [columnSizingOptions] = useState(
-    GetTableColumnSizingOptions(columnsData)
+  const [columnSizingOptions] = useState<TableColumnSizingOptions>(
+    GetTableColumnSizingOptions(defaultColumns)
   );
 
   const sortableColumns = columnsData.filter(
@@ -76,7 +77,12 @@ const TableV2: React.FC<ITableV2> = (props) => {
       items: defaultDataSource,
     },
     [
-      useTableColumnSizing_unstable({ columnSizingOptions }),
+      useTableColumnSizing_unstable({
+        columnSizingOptions,
+        onColumnResize: (_, { columnId, width }) => {
+          props.resizable && props.onResizeColumn?.(columnId as string, width)
+        },
+      }),
       useTableSort({
         defaultSortState:
           props.sort === undefined

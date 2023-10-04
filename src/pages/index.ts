@@ -4,6 +4,7 @@ export { BasicUncontrolled } from "./BasicUncontrolled";
 export { Sorting } from "./Sorting";
 export { SortingControlled } from "./SortingControlled";
 export { Resize } from "./Resize";
+export { ResizeControlled } from "./ResizeControlled";
 export { RearrangeColumn } from "./RearrangeColumn";
 export { RearrangeColumnControlled } from "./RearrangeColumnControlled";
 export { SingleSelection } from "./SingleSelection";

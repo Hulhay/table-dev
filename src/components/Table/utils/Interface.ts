@@ -42,9 +42,13 @@ export interface ITableV2 {
   defaultDataSource?: any[];
   columns?: ITableV2Column[];
   dataSource?: any[];
+
   sort?: ISort;
   onSortChange?: (sort?: ISort) => void;
+
   resizable?: boolean;
+  onResizeColumn?: (columnKey?: string, width?: number) => void;
+
   rearrangeColumnEnabled?: boolean;
   onRearrangeColumn?: (
     newColumns?: ITableV2Column[],
@@ -52,10 +56,12 @@ export interface ITableV2 {
     sourceIndex?: number,
     destinationIndex?: number
   ) => void;
+
   selectionMode?: "single" | "multiselect";
   subtleSelection?: boolean;
   selectedRowsIndex?: number[];
   onSelectedRowsIndexChange?: (rowsIndex?: number[]) => void;
+
   settingShowColumnEnabled?: boolean;
   loading?: boolean;
 }
