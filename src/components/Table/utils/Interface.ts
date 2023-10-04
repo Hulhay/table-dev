@@ -15,14 +15,26 @@ export interface HeaderTableCellProps {
 }
 
 export interface SettingTableButtonProps {
-  settingShowColumnEnabled: boolean;
+  menuShowColumnEnabled?: boolean;
   showColumnTableProps: MenuShowColumnTableProps;
+
+  menuGroupDataSourceEnabled?: boolean;
+  groupByTableProps: MenuGroupByTableProps;
 }
 
 export interface MenuShowColumnTableProps {
   checkedValues: Record<string, string[]>;
   uncheckedValues: Record<string, string[]>;
   onCheckedValueChange: (
+    e: MenuCheckedValueChangeEvent,
+    data: MenuCheckedValueChangeData
+  ) => void;
+}
+
+export interface MenuGroupByTableProps {
+  groupByList: string[];
+  groupBy: Record<string, string[]>;
+  onGroupByChange: (
     e: MenuCheckedValueChangeEvent,
     data: MenuCheckedValueChangeData
   ) => void;

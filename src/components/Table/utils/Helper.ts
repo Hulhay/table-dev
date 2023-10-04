@@ -114,7 +114,15 @@ export const SetDisplayColumns = (
 };
 
 export const ShowSettingButton = (props: ITableV2) => {
-  return (
-    props.menuShowColumnEnabled || props.menuGroupDataSourceEnabled
-  );
+  return props.menuShowColumnEnabled || props.menuGroupDataSourceEnabled;
+};
+
+export const GetUniqueFromData = (dataSource: any[], field: string) => {
+  const uniques = dataSource.reduce((result: any[], item: any) => {
+    if (!result.includes(item[field])) {
+      result.push(item[field]);
+    }
+    return result;
+  }, []);
+  return uniques;
 };

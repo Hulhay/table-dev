@@ -11,6 +11,7 @@ import {
   RearrangeColumnControlled,
   Resize,
   ResizeControlled,
+  SettingGroupData,
   SettingShowColumn,
   SingleSelection,
   SingleSelectionControlled,
@@ -55,7 +56,7 @@ const Navigations = createBrowserRouter([
       },
       {
         path: "rearrange-column-controlled",
-        element: <RearrangeColumnControlled />
+        element: <RearrangeColumnControlled />,
       },
       {
         path: "single-selection",
@@ -76,6 +77,10 @@ const Navigations = createBrowserRouter([
       {
         path: "setting-show-column",
         element: <SettingShowColumn />,
+      },
+      {
+        path: "setting-group-data",
+        element: <SettingGroupData />,
       },
       {
         path: "loading-state",

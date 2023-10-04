@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
+  Label,
   Menu,
   MenuItem,
   MenuList,
@@ -26,9 +27,11 @@ import {
   GetColumnKeyHidden,
   GetColumnKeyShow,
   GetTableColumnSizingOptions,
+  GetUniqueFromData,
   Reorder,
   SetDisplayColumns,
   ShowSettingButton,
+  TitleCase,
 } from "./utils/Helper";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -136,21 +139,6 @@ const TableV2: React.FC<ITableV2> = (props) => {
     sortDirection: getSortDirection(columnId),
   });
 
-  const rows = sort(
-    getRows((row) => {
-      const selected = isRowSelected(row.rowId);
-      return {
-        ...row,
-        onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
-        selected,
-        appearance:
-          selected && props.selectionMode
-            ? ("brand" as const)
-            : ("none" as const),
-      };
-    })
-  );
-
   const moveColumn = (sourceIndex: number, destinationIndex: number) => {
     const newOrderHeader = Reorder(columnsData, sourceIndex, destinationIndex);
 
@@ -173,20 +161,22 @@ const TableV2: React.FC<ITableV2> = (props) => {
     []
   );
 
-  const [checkedValues, setCheckedValues] = useState<Record<string, string[]>>({
+  const [columnsCheckedValues, setcolumnsCheckedValues] = useState<
+    Record<string, string[]>
+  >({
     show: columnsShow,
   });
-  const [uncheckedValues, setuncheckedValues] = useState<
+  const [columnsUncheckedValues, setcolumnsUncheckedValues] = useState<
     Record<string, string[]>
   >({
     hidden: columnsHidden,
   });
-  const onCheckedValueChange: MenuProps["onCheckedValueChange"] = (
+  const onColumnsCheckedValueChange: MenuProps["onCheckedValueChange"] = (
     _,
     { name, checkedItems }
   ) => {
-    const { show } = checkedValues;
-    const { hidden } = uncheckedValues;
+    const { show } = columnsCheckedValues;
+    const { hidden } = columnsUncheckedValues;
 
     if (name === "show") {
       const checked = show.filter((item) => checkedItems.includes(item));
@@ -194,8 +184,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
       hidden.push(...unchecked);
 
-      setCheckedValues({ show: checked });
-      setuncheckedValues((prev) => {
+      setcolumnsCheckedValues({ show: checked });
+      setcolumnsUncheckedValues((prev) => {
         return prev ? { ...prev, ["hidden"]: hidden } : { ["hidden"]: hidden };
       });
 
@@ -213,8 +203,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
         (item) => !checkedItems.includes(item)
       );
 
-      setuncheckedValues({ hidden: newUncheckedValues });
-      setCheckedValues((prev) => {
+      setcolumnsUncheckedValues({ hidden: newUncheckedValues });
+      setcolumnsCheckedValues((prev) => {
         return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
       });
 
@@ -230,130 +220,202 @@ const TableV2: React.FC<ITableV2> = (props) => {
     }
   };
 
+  const [groupBy, setGroupBy] = useState<Record<string, string[]>>({
+    groupby: ["none"],
+  });
+  const onGroupByChange: MenuProps["onCheckedValueChange"] = (
+    _,
+    { name, checkedItems }
+  ) => {
+    setGroupBy((prev) => ({ ...prev, [name]: checkedItems }));
+  };
+
+  const groups = GetUniqueFromData(defaultDataSource, groupBy["groupby"][0]);
+
+  const [selectedGroup, setSelectedGroup] = useState<string>("");
+
+  const rows = sort(
+    getRows((row) => {
+      const selected = isRowSelected(row.rowId);
+      return {
+        ...row,
+        onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
+        selected,
+        appearance:
+          selected && props.selectionMode
+            ? ("brand" as const)
+            : ("none" as const),
+      };
+    })
+  );
+
+  useEffect(() => {
+    console.log(selectedGroup);
+  }, [selectedGroup]);
+
+  // const filteredRows = rows.filter((row) => row.item[groupBy["groupby"][0]] === groups[1])
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {ShowSettingButton(props) && (
         <SettingButton
-          settingShowColumnEnabled={
-            props.menuShowColumnEnabled === true ? true : false
-          }
+          menuShowColumnEnabled={props.menuShowColumnEnabled}
+          menuGroupDataSourceEnabled={props.menuGroupDataSourceEnabled}
           showColumnTableProps={{
-            checkedValues,
-            uncheckedValues,
-            onCheckedValueChange,
+            checkedValues: columnsCheckedValues,
+            uncheckedValues: columnsUncheckedValues,
+            onCheckedValueChange: onColumnsCheckedValueChange,
+          }}
+          groupByTableProps={{
+            groupByList: Object.keys(defaultDataSource[0]),
+            groupBy,
+            onGroupByChange,
           }}
         />
       )}
       <DndProvider backend={HTML5Backend}>
-        <Table
-          ref={props.resizable === false ? undefined : tableRef}
-          {...columnSizing_unstable.getTableProps()}
-        >
-          {/* Table Header */}
-          <TableHeader>
-            <TableRow style={{ backgroundColor: "#eeeeee" }}>
-              {props.selectionMode && (
-                <TableSelectionCell
-                  type={props.selectionMode === "single" ? "radio" : "checkbox"}
-                  checked={
-                    allRowsSelected ? true : someRowsSelected ? "mixed" : false
-                  }
-                  hidden={props.selectionMode !== "multiselect"}
-                  onClick={toggleAllRows}
-                />
-              )}
-              {columnsData.map((column: ITableV2Column, index: number) => {
-                return (
-                  <Menu openOnContext key={column.key}>
-                    <MenuTrigger>
-                      <TableHeaderCell
-                        key={column.key}
-                        tabIndex={index}
-                        {...columnSizing_unstable.getTableHeaderCellProps(
-                          column.key
-                        )}
-                        {...(column.compare && headerSortProps(column.key))}
-                      >
-                        <HeaderCell
-                          column={column}
-                          index={index}
-                          key={column.key}
-                          moveColumn={moveColumn}
-                          rearrangeColumnEnabled={
-                            props.rearrangeColumnEnabled === true ? true : false
-                          }
-                        />
-                      </TableHeaderCell>
-                    </MenuTrigger>
-                    <MenuPopover>
-                      <MenuList>
-                        <MenuItem
-                          onClick={columnSizing_unstable.enableKeyboardMode(
-                            column.key
-                          )}
-                        >
-                          Keyboard Column Resizing
-                        </MenuItem>
-                      </MenuList>
-                    </MenuPopover>
-                  </Menu>
-                );
-              })}
-            </TableRow>
-          </TableHeader>
-
-          {/* Table Body */}
-          <TableBody>
-            {props.loading ? (
-              <LoadingState
-                colspan={
-                  props.selectionMode
-                    ? columnsData.length + 1
-                    : columnsData.length
-                }
-              />
-            ) : (
-              <React.Fragment>
-                {rows.map(({ item, selected, onClick, appearance }, index) => {
-                  return (
-                    <TableRow
-                      key={index}
-                      tabIndex={index}
-                      onClick={onClick}
-                      appearance={appearance}
-                    >
-                      {props.selectionMode && (
-                        <TableSelectionCell
-                          subtle={props.subtleSelection}
-                          type={
-                            props.selectionMode === "single"
-                              ? "radio"
-                              : "checkbox"
-                          }
-                          checked={selected}
-                        />
-                      )}
-                      {columnsData.map((column: ITableV2Column) => {
+        {groups.map((groupItem) => {
+          return (
+            <React.Fragment>
+              {groups[0] && <Label>{TitleCase(groupItem)}</Label>}
+              <Table
+                ref={props.resizable === false ? undefined : tableRef}
+                {...columnSizing_unstable.getTableProps()}
+              >
+                {/* Table Header */}
+                <TableHeader>
+                  <TableRow style={{ backgroundColor: "#eeeeee" }}>
+                    {props.selectionMode && (
+                      <TableSelectionCell
+                        type={
+                          props.selectionMode === "single"
+                            ? "radio"
+                            : "checkbox"
+                        }
+                        checked={
+                          allRowsSelected && selectedGroup === groupItem
+                            ? true
+                            : someRowsSelected && selectedGroup === groupItem
+                            ? "mixed"
+                            : false
+                        }
+                        hidden={props.selectionMode !== "multiselect"}
+                        key={groupItem}
+                        onClick={(e) => {
+                          setSelectedGroup(groupItem);
+                          toggleAllRows(e);
+                        }}
+                      />
+                    )}
+                    {columnsData.map(
+                      (column: ITableV2Column, index: number) => {
                         return (
-                          <TableCell
-                            key={item[column.dataIndex || column.key]}
-                            {...columnSizing_unstable.getTableCellProps(
-                              column.key
-                            )}
-                          >
-                            {column.onRenderDataSource
-                              ? column.onRenderDataSource(item)
-                              : item[column.dataIndex || ""]}
-                          </TableCell>
+                          <Menu openOnContext key={column.key}>
+                            <MenuTrigger>
+                              <TableHeaderCell
+                                key={column.key}
+                                tabIndex={index}
+                                {...columnSizing_unstable.getTableHeaderCellProps(
+                                  column.key
+                                )}
+                                {...(column.compare &&
+                                  headerSortProps(column.key))}
+                              >
+                                <HeaderCell
+                                  column={column}
+                                  index={index}
+                                  key={column.key}
+                                  moveColumn={moveColumn}
+                                  rearrangeColumnEnabled={
+                                    props.rearrangeColumnEnabled === true
+                                      ? true
+                                      : false
+                                  }
+                                />
+                              </TableHeaderCell>
+                            </MenuTrigger>
+                            <MenuPopover>
+                              <MenuList>
+                                <MenuItem
+                                  onClick={columnSizing_unstable.enableKeyboardMode(
+                                    column.key
+                                  )}
+                                >
+                                  Keyboard Column Resizing
+                                </MenuItem>
+                              </MenuList>
+                            </MenuPopover>
+                          </Menu>
                         );
-                      })}
-                    </TableRow>
-                  );
-                })}
-              </React.Fragment>
-            )}
-          </TableBody>
-        </Table>
+                      }
+                    )}
+                  </TableRow>
+                </TableHeader>
+
+                {/* Table Body */}
+                <TableBody>
+                  {props.loading ? (
+                    <LoadingState
+                      colspan={
+                        props.selectionMode
+                          ? columnsData.length + 1
+                          : columnsData.length
+                      }
+                    />
+                  ) : (
+                    <React.Fragment>
+                      {rows
+                        // .filter((row) => {
+                        //   row.item[groupBy["groupby"][0]] === groupItem;
+                        // })
+                        .map(({ item, selected, appearance, rowId }, index) => {
+                          // const status = item[groupBy["groupby"][0]];
+                          if (item[groupBy["groupby"][0]] !== groupItem) return;
+                          return (
+                            <TableRow
+                              key={index}
+                              tabIndex={index}
+                              onClick={(e) => {
+                                setSelectedGroup(groupItem);
+                                toggleRow(e, rowId);
+                              }}
+                              appearance={appearance}
+                            >
+                              {props.selectionMode && (
+                                <TableSelectionCell
+                                  subtle={props.subtleSelection}
+                                  type={
+                                    props.selectionMode === "single"
+                                      ? "radio"
+                                      : "checkbox"
+                                  }
+                                  checked={selected}
+                                />
+                              )}
+                              {columnsData.map((column: ITableV2Column) => {
+                                return (
+                                  <TableCell
+                                    key={item[column.dataIndex || column.key]}
+                                    {...columnSizing_unstable.getTableCellProps(
+                                      column.key
+                                    )}
+                                  >
+                                    {column.onRenderDataSource
+                                      ? column.onRenderDataSource(item)
+                                      : item[column.dataIndex || ""]}
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                          );
+                        })}
+                    </React.Fragment>
+                  )}
+                </TableBody>
+              </Table>
+            </React.Fragment>
+          );
+        })}
       </DndProvider>
     </div>
   );
