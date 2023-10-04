@@ -68,7 +68,7 @@ const navLink: INavLinkGroup[] = [
         key: "multiple-selection-controlled",
       },
       {
-        name: "Setting Show Column Uncontrolled",
+        name: "Menu Show Column Uncontrolled",
         url: "/setting-show-column",
         key: "setting-show-column",
       },

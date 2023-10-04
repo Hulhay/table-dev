@@ -16,10 +16,10 @@ export interface HeaderTableCellProps {
 
 export interface SettingTableButtonProps {
   settingShowColumnEnabled: boolean;
-  showColumnTableProps: ShowColumnTableProps;
+  showColumnTableProps: MenuShowColumnTableProps;
 }
 
-export interface ShowColumnTableProps {
+export interface MenuShowColumnTableProps {
   checkedValues: Record<string, string[]>;
   uncheckedValues: Record<string, string[]>;
   onCheckedValueChange: (
@@ -67,8 +67,8 @@ export interface ITableV2 {
   selectedRowsIndex?: number[];
   onSelectedRowsIndexChange?: (rowsIndex?: number[]) => void;
 
-  settingShowColumnEnabled?: boolean;
-  settingGroupDataSourceEnabled?: boolean;
+  menuShowColumnEnabled?: boolean;
+  menuGroupDataSourceEnabled?: boolean;
 
   loading?: boolean;
 }

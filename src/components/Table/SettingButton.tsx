@@ -7,7 +7,7 @@ import {
 } from "@fluentui/react-components";
 import React from "react";
 import { SettingTableButtonProps } from "./utils/Interface";
-import ShowHideColumn from "./ShowHideColumn";
+import MenuShowHideColumn from "./MenuShowHideColumn";
 
 const SettingButton: React.FC<SettingTableButtonProps> = (props) => {
   return (
@@ -20,7 +20,7 @@ const SettingButton: React.FC<SettingTableButtonProps> = (props) => {
         <MenuPopover>
           <MenuList>
             {props.settingShowColumnEnabled && (
-              <ShowHideColumn {...props.showColumnTableProps} />
+              <MenuShowHideColumn {...props.showColumnTableProps} />
             )}
           </MenuList>
         </MenuPopover>

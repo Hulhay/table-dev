@@ -10,10 +10,10 @@ import {
   MenuTrigger,
 } from "@fluentui/react-components";
 import React from "react";
-import { ShowColumnTableProps } from "./utils/Interface";
+import { MenuShowColumnTableProps } from "./utils/Interface";
 import { TitleCase } from "./utils/Helper";
 
-const ShowHideColumn: React.FC<ShowColumnTableProps> = (props) => {
+const MenuShowHideColumn: React.FC<MenuShowColumnTableProps> = (props) => {
   return (
     <div style={{ minWidth: 100, alignSelf: "end" }}>
       <Menu
@@ -54,4 +54,4 @@ const ShowHideColumn: React.FC<ShowColumnTableProps> = (props) => {
   );
 };
 
-export default ShowHideColumn;
+export default MenuShowHideColumn;

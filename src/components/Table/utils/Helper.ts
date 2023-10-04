@@ -115,6 +115,6 @@ export const SetDisplayColumns = (
 
 export const ShowSettingButton = (props: ITableV2) => {
   return (
-    props.settingShowColumnEnabled || props.settingGroupDataSourceEnabled
+    props.menuShowColumnEnabled || props.menuGroupDataSourceEnabled
   );
 };

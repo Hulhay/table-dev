@@ -235,7 +235,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
       {ShowSettingButton(props) && (
         <SettingButton
           settingShowColumnEnabled={
-            props.settingShowColumnEnabled === true ? true : false
+            props.menuShowColumnEnabled === true ? true : false
           }
           showColumnTableProps={{
             checkedValues,
