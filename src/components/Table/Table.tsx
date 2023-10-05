@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableHeaderCell,
   TableRow,
+  TableRowId,
   TableSelectionCell,
   useTableColumnSizing_unstable,
   useTableFeatures,
@@ -247,6 +248,15 @@ const TableV2: React.FC<ITableV2> = (props) => {
     })
   );
 
+  const handleOnRowClick = (
+    e: React.MouseEvent,
+    rowId: TableRowId,
+    row: any
+  ) => {
+    toggleRow(e, rowId);
+    props.onRowClick && props.onRowClick(row)
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {ShowSettingButton(props) && (
@@ -371,9 +381,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                               <TableRow
                                 key={index}
                                 tabIndex={index}
-                                onClick={(e) => {
-                                  toggleRow(e, rowId);
-                                }}
+                                onClick={(e) => handleOnRowClick(e, rowId, item)}
                                 appearance={appearance}
                               >
                                 {props.selectionMode && (

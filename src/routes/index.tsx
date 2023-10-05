@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import {
+  BasicControlled,
   BasicUncontrolled,
   CustomHeaderCell,
   Home,
@@ -34,6 +35,10 @@ const Navigations = createBrowserRouter([
       {
         path: "basic-uncontrolled",
         element: <BasicUncontrolled />,
+      },
+      {
+        path: "basic-controlled",
+        element: <BasicControlled />,
       },
       {
         path: "custom-header",

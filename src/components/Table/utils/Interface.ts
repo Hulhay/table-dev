@@ -85,4 +85,6 @@ export interface ITableV2 {
   menuGroupDataSourceEnabled?: boolean; // default false
 
   loading?: boolean;
+
+  onRowClick?: (row?: any) => void;
 }
