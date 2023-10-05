@@ -8,9 +8,9 @@ import {
 } from "@fluentui/react-components";
 import React from "react";
 import HeaderCell from "./HeaderCell";
-import { HeaderRowProps } from "./utils/Interface";
+import { HeaderCellWrapperProps } from "./utils/Interface";
 
-const HeaderRow: React.FC<HeaderRowProps> = (props) => {
+const HeaderCellWrapper: React.FC<HeaderCellWrapperProps> = (props) => {
   return (
     <Menu openOnContext key={props.column.key}>
       <MenuTrigger>
@@ -48,4 +48,4 @@ const HeaderRow: React.FC<HeaderRowProps> = (props) => {
   );
 };
 
-export default HeaderRow;
+export default HeaderCellWrapper;

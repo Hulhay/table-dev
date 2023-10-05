@@ -4,6 +4,7 @@ import {
   SortDirection,
   TableColumnId,
   TableFeaturesState,
+  TableRowId,
 } from "@fluentui/react-components";
 
 export interface LoadingStateTableProps {
@@ -37,7 +38,7 @@ export interface HeaderTableCellProps {
   ) => void;
 }
 
-export interface HeaderRowProps {
+export interface HeaderCellWrapperProps {
   column: ITableV2Column;
   index: number;
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
@@ -51,6 +52,19 @@ export interface HeaderRowProps {
     event?: React.MouseEvent,
     column?: ITableV2Column
   ) => void;
+}
+
+export interface BodyRowProps {
+  item: any;
+  index: number;
+  selected: boolean;
+  appearance: "none" | "brand";
+  columnsData: ITableV2Column[];
+  selectionMode?: "single" | "multiselect";
+  subtleSelection?: boolean;
+  columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
+  rowId: TableRowId;
+  onRowClick: (e: React.MouseEvent, rowId: TableRowId, item: any) => void;
 }
 
 export interface SettingTableButtonProps {

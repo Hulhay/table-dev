@@ -4,7 +4,6 @@ import {
   MenuProps,
   Table,
   TableBody,
-  TableCell,
   TableColumnId,
   TableColumnSizingOptions,
   TableHeader,
@@ -33,7 +32,8 @@ import LoadingState from "./LoadingState";
 import SettingButton from "./SettingButton";
 import TableGroupHeaderCell from "./TableGroupHeaderCell";
 import AddRow from "./AddRow";
-import HeaderRow from "./HeaderRow";
+import HeaderCellWrapper from "./HeaderCellWrapper";
+import BodyRow from "./BodyRow";
 
 const TableV2: React.FC<ITableV2> = (props) => {
   const defaultDisplayColumn = props.defaultColumns
@@ -330,16 +330,16 @@ const TableV2: React.FC<ITableV2> = (props) => {
                 )}
                 {columnsData.map((column: ITableV2Column, index: number) => {
                   return (
-                    <HeaderRow
-                      column={column}
+                    <HeaderCellWrapper
                       index={index}
+                      column={column}
                       moveColumn={moveColumn}
+                      headerSortProps={headerSortProps}
+                      onHeaderCellClick={handleOnHeaderCellClick}
                       columnSizing_unstable={columnSizing_unstable}
                       rearrangeColumnEnabled={
                         props.rearrangeColumnEnabled === true ? true : false
                       }
-                      headerSortProps={headerSortProps}
-                      onHeaderCellClick={handleOnHeaderCellClick}
                     />
                   );
                 })}
@@ -374,60 +374,39 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             }
                           />
                         )}
+
                         {/* Table Row */}
                         {rows.map(
                           ({ item, selected, appearance, rowId }, index) => {
                             if (item[groupBy["groupby"][0]] !== groupItem)
                               return;
                             return (
-                              <TableRow
+                              <BodyRow
                                 key={index}
-                                tabIndex={index}
-                                onClick={(e) =>
-                                  handleOnRowClick(e, rowId, item)
-                                }
+                                item={item}
+                                rowId={rowId}
+                                index={index}
+                                selected={selected}
                                 appearance={appearance}
-                              >
-                                {/* Selection Cell */}
-                                {props.selectionMode && (
-                                  <TableSelectionCell
-                                    subtle={props.subtleSelection}
-                                    type={
-                                      props.selectionMode === "single"
-                                        ? "radio"
-                                        : "checkbox"
-                                    }
-                                    checked={selected}
-                                  />
-                                )}
-                                {/* Table Cell */}
-                                {columnsData.map((column: ITableV2Column) => {
-                                  return (
-                                    <TableCell
-                                      key={item[column.dataIndex || column.key]}
-                                      {...columnSizing_unstable.getTableCellProps(
-                                        column.key
-                                      )}
-                                    >
-                                      {column.onRenderDataSource
-                                        ? column.onRenderDataSource(item)
-                                        : item[column.dataIndex || ""]}
-                                    </TableCell>
-                                  );
-                                })}
-                              </TableRow>
+                                columnsData={columnsData}
+                                onRowClick={handleOnRowClick}
+                                selectionMode={props.selectionMode}
+                                subtleSelection={props.subtleSelection}
+                                columnSizing_unstable={columnSizing_unstable}
+                              />
                             );
                           }
                         )}
+
                         {/* Add Row */}
                         {props.addRowEnabled && (
                           <AddRow
+                            onAddRowClick={() => handleOnAddRowClick(groupItem)}
                             colspan={
                               props.selectionMode
                                 ? columnsData.length + 1
                                 : columnsData.length
                             }
-                            onAddRowClick={() => handleOnAddRowClick(groupItem)}
                           />
                         )}
                       </React.Fragment>
