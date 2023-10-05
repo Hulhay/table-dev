@@ -223,14 +223,23 @@ const TableV2: React.FC<ITableV2> = (props) => {
     }
   };
 
-  const [groupBy, setGroupBy] = useState<Record<string, string[]>>({
+  const [defaultGroupBy, setDefaultGroupBy] = useState<
+    Record<string, string[]>
+  >({
     groupby: ["none"],
   });
+  const groupBy = props.groupBy ? { groupby: [props.groupBy] } : defaultGroupBy;
+
   const onGroupByChange: MenuProps["onCheckedValueChange"] = (
     _,
     { name, checkedItems }
   ) => {
-    setGroupBy((prev) => ({ ...prev, [name]: checkedItems }));
+    if (props.groupBy) {
+      props.onGroupByChange &&
+        props.onGroupByChange(groupBy["groupby"][0], checkedItems[0]);
+    } else {
+      setDefaultGroupBy((prev) => ({ ...prev, [name]: checkedItems }));
+    }
   };
 
   const groups = GetUniqueFromData(dataSource, groupBy["groupby"][0]);
@@ -266,13 +275,17 @@ const TableV2: React.FC<ITableV2> = (props) => {
     props.onHeaderCellClick && props.onHeaderCellClick(column);
   };
 
-  const handleOnAddRowClick = () => {
+  const handleOnAddRowClick = (groupItem?: string) => {
     const defaultId = GenerateUniqueID();
     const defaultNewRow = {
       id: `row-${defaultId}`,
     };
     props.onAddRowClick &&
-      props.onAddRowClick([...dataSource, defaultNewRow], defaultNewRow);
+      props.onAddRowClick(
+        [...dataSource, defaultNewRow],
+        defaultNewRow,
+        groupItem
+      );
 
     props.defaultDataSource &&
       setDefaultDataSource((prev) => [...prev, defaultNewRow]);
@@ -446,7 +459,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                                 ? columnsData.length + 1
                                 : columnsData.length
                             }
-                            onAddRowClick={handleOnAddRowClick}
+                            onAddRowClick={() => handleOnAddRowClick(groupItem)}
                           />
                         )}
                       </React.Fragment>

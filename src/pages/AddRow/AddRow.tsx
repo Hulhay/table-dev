@@ -60,8 +60,8 @@ const AddRow: React.FC = () => {
         resizable={false}
         onRowClick={onRowClick}
         onHeaderCellClick={onHeaderCellClick}
-        onAddRowClick={onAddRowClick}
         addRowEnabled={true}
+        onAddRowClick={onAddRowClick}
       />
     </div>
   );

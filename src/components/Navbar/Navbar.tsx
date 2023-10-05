@@ -93,6 +93,11 @@ const navLink: INavLinkGroup[] = [
         key: "setting-group-data",
       },
       {
+        name: "Menu Group Data Controlled",
+        url: "/setting-group-data-controlled",
+        key: "setting-group-data-controlled",
+      },
+      {
         name: "Loading State",
         url: "/loading-state",
         key: "loading-state",

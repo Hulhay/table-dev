@@ -15,6 +15,7 @@ import {
   Resize,
   ResizeControlled,
   SettingGroupData,
+  SettingGroupDataControlled,
   SettingShowColumn,
   SingleSelection,
   SingleSelectionControlled,
@@ -96,6 +97,10 @@ const Navigations = createBrowserRouter([
       {
         path: "setting-group-data",
         element: <SettingGroupData />,
+      },
+      {
+        path: "setting-group-data-controlled",
+        element: <SettingGroupDataControlled />,
       },
       {
         path: "loading-state",

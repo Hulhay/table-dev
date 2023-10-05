@@ -16,4 +16,5 @@ export { MultipleSelection } from "./MultipleSelection";
 export { MultipleSelectionControlled } from "./MultipleSelectionControlled";
 export { SettingShowColumn } from "./SettingShowColumn";
 export { SettingGroupData } from "./SettingGroupData";
+export { SettingGroupDataControlled } from "./SettingGroupDataControlled";
 export { LoadingState } from "./LoadingState";
