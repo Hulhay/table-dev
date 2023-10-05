@@ -3,6 +3,7 @@ export { Home } from "./Home";
 export { BasicUncontrolled } from "./BasicUncontrolled";
 export { BasicControlled } from "./BasicControlled";
 export { CustomHeaderCell } from "./CustomHeaderCell";
+export { AddRow } from "./AddRow";
 export { Sorting } from "./Sorting";
 export { SortingControlled } from "./SortingControlled";
 export { Resize } from "./Resize";

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import {
+  AddRow,
   BasicControlled,
   BasicUncontrolled,
   CustomHeaderCell,
@@ -43,6 +44,10 @@ const Navigations = createBrowserRouter([
       {
         path: "custom-header",
         element: <CustomHeaderCell />,
+      },
+      {
+        path: "add-row",
+        element: <AddRow />,
       },
       {
         path: "sorting",

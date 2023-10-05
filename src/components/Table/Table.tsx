@@ -24,6 +24,7 @@ import {
 } from "@fluentui/react-components";
 import {
   CreateColumnHeader,
+  GenerateUniqueID,
   GetColumnKeyHidden,
   GetColumnKeyShow,
   GetTableColumnSizingOptions,
@@ -38,6 +39,7 @@ import HeaderCell from "./HeaderCell";
 import LoadingState from "./LoadingState";
 import SettingButton from "./SettingButton";
 import TableGroupHeaderCell from "./TableGroupHeaderCell";
+import AddRow from "./AddRow";
 
 const TableV2: React.FC<ITableV2> = (props) => {
   const defaultDisplayColumn = props.defaultColumns
@@ -51,9 +53,10 @@ const TableV2: React.FC<ITableV2> = (props) => {
   );
   const columnsData = props.columns || defaultColumns;
 
-  const [defaultDataSource] = useState(
-    props.defaultDataSource || props.dataSource || []
+  const [defaultDataSource, setDefaultDataSource] = useState(
+    props.defaultDataSource || []
   );
+  const dataSource = props.dataSource || defaultDataSource;
 
   const [columnSizingOptions] = useState<TableColumnSizingOptions>(
     GetTableColumnSizingOptions(defaultColumns)
@@ -78,7 +81,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
   } = useTableFeatures(
     {
       columns: CreateColumnHeader(columnsData),
-      items: defaultDataSource,
+      items: dataSource,
     },
     [
       useTableColumnSizing_unstable({
@@ -157,7 +160,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     [columnsData]
   );
   const columnsHidden = useMemo(
-    () => GetColumnKeyHidden(columnsShow, defaultDataSource),
+    () => GetColumnKeyHidden(columnsShow, dataSource),
     []
   );
 
@@ -230,7 +233,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     setGroupBy((prev) => ({ ...prev, [name]: checkedItems }));
   };
 
-  const groups = GetUniqueFromData(defaultDataSource, groupBy["groupby"][0]);
+  const groups = GetUniqueFromData(dataSource, groupBy["groupby"][0]);
 
   const rows = sort(
     getRows((row) => {
@@ -257,10 +260,22 @@ const TableV2: React.FC<ITableV2> = (props) => {
   };
 
   const handleOnHeaderCellClick = (
-    _: React.MouseEvent,
+    _?: React.MouseEvent,
     column?: ITableV2Column
   ) => {
     props.onHeaderCellClick && props.onHeaderCellClick(column);
+  };
+
+  const handleOnAddRowClick = () => {
+    const defaultId = GenerateUniqueID();
+    const defaultNewRow = {
+      id: `row-${defaultId}`,
+    };
+    props.onAddRowClick &&
+      props.onAddRowClick([...dataSource, defaultNewRow], defaultNewRow);
+
+    props.defaultDataSource &&
+      setDefaultDataSource((prev) => [...prev, defaultNewRow]);
   };
 
   return (
@@ -275,7 +290,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
             onCheckedValueChange: onColumnsCheckedValueChange,
           }}
           groupByTableProps={{
-            groupByList: Object.keys(defaultDataSource[0]),
+            groupByList: Object.keys(dataSource[0]),
             groupBy,
             onGroupByChange,
           }}
@@ -353,6 +368,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
             {/* Table Body */}
             <TableBody>
               {props.loading ? (
+                // Loading State
                 <LoadingState
                   colspan={
                     props.selectionMode
@@ -361,10 +377,12 @@ const TableV2: React.FC<ITableV2> = (props) => {
                   }
                 />
               ) : (
+                // Data Source
                 <React.Fragment>
                   {groups.map((groupItem) => {
                     return (
                       <React.Fragment>
+                        {/* Group Header */}
                         {groups[0] && (
                           <TableGroupHeaderCell
                             label={groupItem}
@@ -375,6 +393,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             }
                           />
                         )}
+                        {/* Table Row */}
                         {rows.map(
                           ({ item, selected, appearance, rowId }, index) => {
                             if (item[groupBy["groupby"][0]] !== groupItem)
@@ -388,6 +407,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                                 }
                                 appearance={appearance}
                               >
+                                {/* Selection Cell */}
                                 {props.selectionMode && (
                                   <TableSelectionCell
                                     subtle={props.subtleSelection}
@@ -399,6 +419,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                                     checked={selected}
                                   />
                                 )}
+                                {/* Table Cell */}
                                 {columnsData.map((column: ITableV2Column) => {
                                   return (
                                     <TableCell
@@ -417,6 +438,17 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             );
                           }
                         )}
+                        {/* Add Row */}
+                        {props.addRowEnabled && (
+                          <AddRow
+                            colspan={
+                              props.selectionMode
+                                ? columnsData.length + 1
+                                : columnsData.length
+                            }
+                            onAddRowClick={handleOnAddRowClick}
+                          />
+                        )}
                       </React.Fragment>
                     );
                   })}
@@ -425,7 +457,6 @@ const TableV2: React.FC<ITableV2> = (props) => {
             </TableBody>
           </Table>
         </React.Fragment>
-        {/* })} */}
       </DndProvider>
     </div>
   );

@@ -28,6 +28,11 @@ const navLink: INavLinkGroup[] = [
         key: "custom-header",
       },
       {
+        name: "Add Row",
+        url: "/add-row",
+        key: "add-row",
+      },
+      {
         name: "Sorting Uncontrolled",
         url: "/sorting",
         key: "sorting",

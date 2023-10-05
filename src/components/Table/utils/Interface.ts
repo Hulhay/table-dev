@@ -7,6 +7,11 @@ export interface LoadingStateTableProps {
   colspan: number;
 }
 
+export interface AddRowTableProps {
+  colspan: number;
+  onAddRowClick?: (e?: React.MouseEvent, newRows?: any, newRow?: any) => void;
+}
+
 export interface TableGroupHeaderCellProps {
   colspan: number;
   label: string
@@ -18,7 +23,7 @@ export interface HeaderTableCellProps {
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
   rearrangeColumnEnabled: boolean;
   onRenderHeaderCell?: (column?: ITableV2Column) => JSX.Element;
-  onHeaderCellClick?: (event: React.MouseEvent, column?: ITableV2Column) => void;
+  onHeaderCellClick?: (event?: React.MouseEvent, column?: ITableV2Column) => void;
 }
 
 export interface SettingTableButtonProps {
@@ -91,6 +96,9 @@ export interface ITableV2 {
   menuGroupDataSourceEnabled?: boolean; // default false
 
   loading?: boolean;
+
+  addRowEnabled?: boolean; // default false
+  onAddRowClick?: (newRows?: any, newRow?: any) => void;
 
   onRowClick?: (row?: any) => void;
   onHeaderCellClick?: (column?: ITableV2Column) => void;

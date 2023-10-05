@@ -5,8 +5,8 @@ import { TableGroupHeaderCellProps } from "./utils/Interface";
 
 const TableGroupHeaderCell: React.FC<TableGroupHeaderCellProps> = (props) => {
   return (
-    <TableRow>
-      <TableCell colSpan={props.colspan}>
+    <TableRow style={{backgroundColor: "#eeeeee"}}>
+      <TableCell colSpan={props.colspan} style={{height: 32}}>
         <Label style={{ fontWeight: "bold" }}>{TitleCase(props.label)}</Label>
       </TableCell>
     </TableRow>

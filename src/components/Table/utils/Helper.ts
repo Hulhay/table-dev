@@ -126,3 +126,7 @@ export const GetUniqueFromData = (dataSource: any[], field: string) => {
   }, []);
   return uniques;
 };
+
+export const GenerateUniqueID = () => {
+  return Math.random().toString(16).slice(2);
+};
