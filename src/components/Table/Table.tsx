@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
   Label,
@@ -232,8 +232,6 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
   const groups = GetUniqueFromData(defaultDataSource, groupBy["groupby"][0]);
 
-  const [selectedGroup, setSelectedGroup] = useState<string>("");
-
   const rows = sort(
     getRows((row) => {
       const selected = isRowSelected(row.rowId);
@@ -248,12 +246,6 @@ const TableV2: React.FC<ITableV2> = (props) => {
       };
     })
   );
-
-  useEffect(() => {
-    console.log(selectedGroup);
-  }, [selectedGroup]);
-
-  // const filteredRows = rows.filter((row) => row.item[groupBy["groupby"][0]] === groups[1])
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -274,148 +266,153 @@ const TableV2: React.FC<ITableV2> = (props) => {
         />
       )}
       <DndProvider backend={HTML5Backend}>
-        {groups.map((groupItem) => {
-          return (
-            <React.Fragment>
-              {groups[0] && <Label>{TitleCase(groupItem)}</Label>}
-              <Table
-                ref={props.resizable === false ? undefined : tableRef}
-                {...columnSizing_unstable.getTableProps()}
-              >
-                {/* Table Header */}
-                <TableHeader>
-                  <TableRow style={{ backgroundColor: "#eeeeee" }}>
-                    {props.selectionMode && (
-                      <TableSelectionCell
-                        type={
-                          props.selectionMode === "single"
-                            ? "radio"
-                            : "checkbox"
-                        }
-                        checked={
-                          allRowsSelected && selectedGroup === groupItem
-                            ? true
-                            : someRowsSelected && selectedGroup === groupItem
-                            ? "mixed"
-                            : false
-                        }
-                        hidden={props.selectionMode !== "multiselect"}
-                        key={groupItem}
-                        onClick={(e) => {
-                          setSelectedGroup(groupItem);
-                          toggleAllRows(e);
-                        }}
-                      />
-                    )}
-                    {columnsData.map(
-                      (column: ITableV2Column, index: number) => {
-                        return (
-                          <Menu openOnContext key={column.key}>
-                            <MenuTrigger>
-                              <TableHeaderCell
-                                key={column.key}
-                                tabIndex={index}
-                                {...columnSizing_unstable.getTableHeaderCellProps(
-                                  column.key
-                                )}
-                                {...(column.compare &&
-                                  headerSortProps(column.key))}
-                              >
-                                <HeaderCell
-                                  column={column}
-                                  index={index}
-                                  key={column.key}
-                                  moveColumn={moveColumn}
-                                  rearrangeColumnEnabled={
-                                    props.rearrangeColumnEnabled === true
-                                      ? true
-                                      : false
-                                  }
-                                />
-                              </TableHeaderCell>
-                            </MenuTrigger>
-                            <MenuPopover>
-                              <MenuList>
-                                <MenuItem
-                                  onClick={columnSizing_unstable.enableKeyboardMode(
-                                    column.key
-                                  )}
-                                >
-                                  Keyboard Column Resizing
-                                </MenuItem>
-                              </MenuList>
-                            </MenuPopover>
-                          </Menu>
-                        );
-                      }
-                    )}
-                  </TableRow>
-                </TableHeader>
+        <React.Fragment>
+          <Table
+            ref={props.resizable === false ? undefined : tableRef}
+            {...columnSizing_unstable.getTableProps()}
+          >
+            {/* Table Header */}
+            <TableHeader>
+              <TableRow style={{ backgroundColor: "#eeeeee" }}>
+                {props.selectionMode && (
+                  <TableSelectionCell
+                    type={
+                      props.selectionMode === "single" ? "radio" : "checkbox"
+                    }
+                    checked={
+                      allRowsSelected
+                        ? true
+                        : someRowsSelected
+                        ? "mixed"
+                        : false
+                    }
+                    hidden={props.selectionMode !== "multiselect"}
+                    onClick={toggleAllRows}
+                  />
+                )}
+                {columnsData.map((column: ITableV2Column, index: number) => {
+                  return (
+                    <Menu openOnContext key={column.key}>
+                      <MenuTrigger>
+                        <TableHeaderCell
+                          key={column.key}
+                          tabIndex={index}
+                          {...columnSizing_unstable.getTableHeaderCellProps(
+                            column.key
+                          )}
+                          {...(column.compare && headerSortProps(column.key))}
+                        >
+                          <HeaderCell
+                            column={column}
+                            index={index}
+                            key={column.key}
+                            moveColumn={moveColumn}
+                            rearrangeColumnEnabled={
+                              props.rearrangeColumnEnabled === true
+                                ? true
+                                : false
+                            }
+                          />
+                        </TableHeaderCell>
+                      </MenuTrigger>
+                      <MenuPopover>
+                        <MenuList>
+                          <MenuItem
+                            onClick={columnSizing_unstable.enableKeyboardMode(
+                              column.key
+                            )}
+                          >
+                            Keyboard Column Resizing
+                          </MenuItem>
+                        </MenuList>
+                      </MenuPopover>
+                    </Menu>
+                  );
+                })}
+              </TableRow>
+            </TableHeader>
 
-                {/* Table Body */}
-                <TableBody>
-                  {props.loading ? (
-                    <LoadingState
-                      colspan={
-                        props.selectionMode
-                          ? columnsData.length + 1
-                          : columnsData.length
-                      }
-                    />
-                  ) : (
-                    <React.Fragment>
-                      {rows
-                        // .filter((row) => {
-                        //   row.item[groupBy["groupby"][0]] === groupItem;
-                        // })
-                        .map(({ item, selected, appearance, rowId }, index) => {
-                          // const status = item[groupBy["groupby"][0]];
-                          if (item[groupBy["groupby"][0]] !== groupItem) return;
-                          return (
-                            <TableRow
-                              key={index}
-                              tabIndex={index}
-                              onClick={(e) => {
-                                setSelectedGroup(groupItem);
-                                toggleRow(e, rowId);
-                              }}
-                              appearance={appearance}
+            {/* Table Body */}
+            <TableBody>
+              {props.loading ? (
+                <LoadingState
+                  colspan={
+                    props.selectionMode
+                      ? columnsData.length + 1
+                      : columnsData.length
+                  }
+                />
+              ) : (
+                <React.Fragment>
+                  {groups.map((groupItem) => {
+                    return (
+                      <React.Fragment>
+                        {groups[0] && (
+                          <TableRow>
+                            <TableCell
+                              colSpan={
+                                props.selectionMode
+                                  ? columnsData.length + 1
+                                  : columnsData.length
+                              }
                             >
-                              {props.selectionMode && (
-                                <TableSelectionCell
-                                  subtle={props.subtleSelection}
-                                  type={
-                                    props.selectionMode === "single"
-                                      ? "radio"
-                                      : "checkbox"
-                                  }
-                                  checked={selected}
-                                />
-                              )}
-                              {columnsData.map((column: ITableV2Column) => {
-                                return (
-                                  <TableCell
-                                    key={item[column.dataIndex || column.key]}
-                                    {...columnSizing_unstable.getTableCellProps(
-                                      column.key
-                                    )}
-                                  >
-                                    {column.onRenderDataSource
-                                      ? column.onRenderDataSource(item)
-                                      : item[column.dataIndex || ""]}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          );
-                        })}
-                    </React.Fragment>
-                  )}
-                </TableBody>
-              </Table>
-            </React.Fragment>
-          );
-        })}
+                              <Label style={{ fontWeight: "bold" }}>
+                                {TitleCase(groupItem)}
+                              </Label>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                        {rows.map(
+                          ({ item, selected, appearance, rowId }, index) => {
+                            if (item[groupBy["groupby"][0]] !== groupItem)
+                              return;
+                            return (
+                              <TableRow
+                                key={index}
+                                tabIndex={index}
+                                onClick={(e) => {
+                                  toggleRow(e, rowId);
+                                }}
+                                appearance={appearance}
+                              >
+                                {props.selectionMode && (
+                                  <TableSelectionCell
+                                    subtle={props.subtleSelection}
+                                    type={
+                                      props.selectionMode === "single"
+                                        ? "radio"
+                                        : "checkbox"
+                                    }
+                                    checked={selected}
+                                  />
+                                )}
+                                {columnsData.map((column: ITableV2Column) => {
+                                  return (
+                                    <TableCell
+                                      key={item[column.dataIndex || column.key]}
+                                      {...columnSizing_unstable.getTableCellProps(
+                                        column.key
+                                      )}
+                                    >
+                                      {column.onRenderDataSource
+                                        ? column.onRenderDataSource(item)
+                                        : item[column.dataIndex || ""]}
+                                    </TableCell>
+                                  );
+                                })}
+                              </TableRow>
+                            );
+                          }
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </React.Fragment>
+              )}
+            </TableBody>
+          </Table>
+        </React.Fragment>
+        {/* })} */}
       </DndProvider>
     </div>
   );
