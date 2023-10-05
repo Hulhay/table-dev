@@ -1,6 +1,9 @@
 import {
   MenuCheckedValueChangeData,
   MenuCheckedValueChangeEvent,
+  SortDirection,
+  TableColumnId,
+  TableFeaturesState,
 } from "@fluentui/react-components";
 
 export interface LoadingStateTableProps {
@@ -28,6 +31,22 @@ export interface HeaderTableCellProps {
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
   rearrangeColumnEnabled: boolean;
   onRenderHeaderCell?: (column?: ITableV2Column) => JSX.Element;
+  onHeaderCellClick?: (
+    event?: React.MouseEvent,
+    column?: ITableV2Column
+  ) => void;
+}
+
+export interface HeaderRowProps {
+  column: ITableV2Column;
+  index: number;
+  moveColumn: (dragIndex: number, hoverIndex: number) => void;
+  columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
+  rearrangeColumnEnabled: boolean;
+  headerSortProps: (columnId: TableColumnId) => {
+    onClick: (e: React.MouseEvent) => void;
+    sortDirection: SortDirection | undefined;
+  };
   onHeaderCellClick?: (
     event?: React.MouseEvent,
     column?: ITableV2Column
@@ -106,7 +125,7 @@ export interface ITableV2 {
   menuShowColumnEnabled?: boolean; // default false
   menuGroupDataSourceEnabled?: boolean; // default false
 
-  loading?: boolean;
+  loading?: boolean; // default false
 
   addRowEnabled?: boolean; // default false
   onAddRowClick?: (newRows?: any[], newRow?: any, groupItem?: string) => void;

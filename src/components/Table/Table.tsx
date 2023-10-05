@@ -1,19 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
-  Menu,
-  MenuItem,
-  MenuList,
-  MenuPopover,
   MenuProps,
-  MenuTrigger,
   Table,
   TableBody,
   TableCell,
   TableColumnId,
   TableColumnSizingOptions,
   TableHeader,
-  TableHeaderCell,
   TableRow,
   TableRowId,
   TableSelectionCell,
@@ -35,11 +29,11 @@ import {
 } from "./utils/Helper";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import HeaderCell from "./HeaderCell";
 import LoadingState from "./LoadingState";
 import SettingButton from "./SettingButton";
 import TableGroupHeaderCell from "./TableGroupHeaderCell";
 import AddRow from "./AddRow";
+import HeaderRow from "./HeaderRow";
 
 const TableV2: React.FC<ITableV2> = (props) => {
   const defaultDisplayColumn = props.defaultColumns
@@ -336,43 +330,17 @@ const TableV2: React.FC<ITableV2> = (props) => {
                 )}
                 {columnsData.map((column: ITableV2Column, index: number) => {
                   return (
-                    <Menu openOnContext key={column.key}>
-                      <MenuTrigger>
-                        <TableHeaderCell
-                          key={column.key}
-                          tabIndex={index}
-                          {...columnSizing_unstable.getTableHeaderCellProps(
-                            column.key
-                          )}
-                          {...(column.compare && headerSortProps(column.key))}
-                        >
-                          <HeaderCell
-                            column={column}
-                            index={index}
-                            key={column.key}
-                            onRenderHeaderCell={column.onRenderDataSource}
-                            onHeaderCellClick={handleOnHeaderCellClick}
-                            moveColumn={moveColumn}
-                            rearrangeColumnEnabled={
-                              props.rearrangeColumnEnabled === true
-                                ? true
-                                : false
-                            }
-                          />
-                        </TableHeaderCell>
-                      </MenuTrigger>
-                      <MenuPopover>
-                        <MenuList>
-                          <MenuItem
-                            onClick={columnSizing_unstable.enableKeyboardMode(
-                              column.key
-                            )}
-                          >
-                            Keyboard Column Resizing
-                          </MenuItem>
-                        </MenuList>
-                      </MenuPopover>
-                    </Menu>
+                    <HeaderRow
+                      column={column}
+                      index={index}
+                      moveColumn={moveColumn}
+                      columnSizing_unstable={columnSizing_unstable}
+                      rearrangeColumnEnabled={
+                        props.rearrangeColumnEnabled === true ? true : false
+                      }
+                      headerSortProps={headerSortProps}
+                      onHeaderCellClick={handleOnHeaderCellClick}
+                    />
                   );
                 })}
               </TableRow>
