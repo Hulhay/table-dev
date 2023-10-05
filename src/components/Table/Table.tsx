@@ -7,9 +7,7 @@ import {
   TableColumnId,
   TableColumnSizingOptions,
   TableHeader,
-  TableRow,
   TableRowId,
-  TableSelectionCell,
   useTableColumnSizing_unstable,
   useTableFeatures,
   useTableSelection,
@@ -32,8 +30,8 @@ import LoadingState from "./LoadingState";
 import SettingButton from "./SettingButton";
 import TableGroupHeaderCell from "./TableGroupHeaderCell";
 import AddRow from "./AddRow";
-import HeaderCellWrapper from "./HeaderCellWrapper";
 import BodyRow from "./BodyRow";
+import HeaderRow from "./HeaderRow";
 
 const TableV2: React.FC<ITableV2> = (props) => {
   const defaultDisplayColumn = props.defaultColumns
@@ -297,9 +295,9 @@ const TableV2: React.FC<ITableV2> = (props) => {
             onCheckedValueChange: onColumnsCheckedValueChange,
           }}
           groupByTableProps={{
-            groupByList: Object.keys(dataSource[0]),
             groupBy,
             onGroupByChange,
+            groupByList: Object.keys(dataSource[0]),
           }}
         />
       )}
@@ -311,39 +309,21 @@ const TableV2: React.FC<ITableV2> = (props) => {
           >
             {/* Table Header */}
             <TableHeader>
-              <TableRow style={{ backgroundColor: "#eeeeee" }}>
-                {props.selectionMode && (
-                  <TableSelectionCell
-                    type={
-                      props.selectionMode === "single" ? "radio" : "checkbox"
-                    }
-                    checked={
-                      allRowsSelected
-                        ? true
-                        : someRowsSelected
-                        ? "mixed"
-                        : false
-                    }
-                    hidden={props.selectionMode !== "multiselect"}
-                    onClick={toggleAllRows}
-                  />
-                )}
-                {columnsData.map((column: ITableV2Column, index: number) => {
-                  return (
-                    <HeaderCellWrapper
-                      index={index}
-                      column={column}
-                      moveColumn={moveColumn}
-                      headerSortProps={headerSortProps}
-                      onHeaderCellClick={handleOnHeaderCellClick}
-                      columnSizing_unstable={columnSizing_unstable}
-                      rearrangeColumnEnabled={
-                        props.rearrangeColumnEnabled === true ? true : false
-                      }
-                    />
-                  );
-                })}
-              </TableRow>
+              <HeaderRow
+                moveColumn={moveColumn}
+                columnsData={columnsData}
+                toggleAllRows={toggleAllRows}
+                headerSortProps={headerSortProps}
+                selectionMode={props.selectionMode}
+                onHeaderCellClick={handleOnHeaderCellClick}
+                columnSizing_unstable={columnSizing_unstable}
+                checked={
+                  allRowsSelected ? true : someRowsSelected ? "mixed" : false
+                }
+                rearrangeColumnEnabled={
+                  props.rearrangeColumnEnabled === true ? true : false
+                }
+              />
             </TableHeader>
 
             {/* Table Body */}
