@@ -98,6 +98,11 @@ const navLink: INavLinkGroup[] = [
         key: "setting-group-data-controlled",
       },
       {
+        name: "Add Row In Spesific Group",
+        url: "/add-row-in-spesific-group",
+        key: "add-row-in-spesific-group",
+      },
+      {
         name: "Loading State",
         url: "/loading-state",
         key: "loading-state",

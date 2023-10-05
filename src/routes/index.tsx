@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import {
   AddRow,
+  AddRowInSpesificGroup,
   BasicControlled,
   BasicUncontrolled,
   CustomHeaderCell,
@@ -101,6 +102,10 @@ const Navigations = createBrowserRouter([
       {
         path: "setting-group-data-controlled",
         element: <SettingGroupDataControlled />,
+      },
+      {
+        path: "add-row-in-spesific-group",
+        element: <AddRowInSpesificGroup />,
       },
       {
         path: "loading-state",

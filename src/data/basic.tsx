@@ -226,6 +226,36 @@ export const columnsDummyNoAction: ITableV2Column[] = [
   },
 ];
 
+export const columnsDummyAddRowSpesificGroup: ITableV2Column[] = [
+  {
+    key: "title",
+    label: "Title",
+    dataIndex: "title",
+  },
+  {
+    key: "assignee",
+    label: "Assignee",
+    dataIndex: "assignee",
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.assignee.localeCompare(b.assignee);
+    },
+  },
+  {
+    key: "priority",
+    label: "Priority",
+    dataIndex: "priority",
+    onRenderDataSource: (data: IDataSourceBasic) => titleCase(data.priority),
+  },
+  {
+    key: "status",
+    label: "Status",
+    dataIndex: "status",
+    onRenderDataSource: (data: IDataSourceBasic) => {
+      return <Status status={data.status} />;
+    },
+  },
+];
+
 export const dataSourceDummy: IDataSourceBasic[] = [
   {
     id: "task-1",
