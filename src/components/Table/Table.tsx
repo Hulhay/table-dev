@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
-  Label,
   Menu,
   MenuItem,
   MenuList,
@@ -32,13 +31,13 @@ import {
   Reorder,
   SetDisplayColumns,
   ShowSettingButton,
-  TitleCase,
 } from "./utils/Helper";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import HeaderCell from "./HeaderCell";
 import LoadingState from "./LoadingState";
 import SettingButton from "./SettingButton";
+import TableGroupHeaderCell from "./TableGroupHeaderCell";
 
 const TableV2: React.FC<ITableV2> = (props) => {
   const defaultDisplayColumn = props.defaultColumns
@@ -254,12 +253,15 @@ const TableV2: React.FC<ITableV2> = (props) => {
     row: any
   ) => {
     toggleRow(e, rowId);
-    props.onRowClick && props.onRowClick(row)
+    props.onRowClick && props.onRowClick(row);
   };
 
-  const handleOnHeaderCellClick = (_: React.MouseEvent, column?: ITableV2Column) => {
-    props.onHeaderCellClick && props.onHeaderCellClick(column)
-  }
+  const handleOnHeaderCellClick = (
+    _: React.MouseEvent,
+    column?: ITableV2Column
+  ) => {
+    props.onHeaderCellClick && props.onHeaderCellClick(column);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -364,19 +366,14 @@ const TableV2: React.FC<ITableV2> = (props) => {
                     return (
                       <React.Fragment>
                         {groups[0] && (
-                          <TableRow>
-                            <TableCell
-                              colSpan={
-                                props.selectionMode
-                                  ? columnsData.length + 1
-                                  : columnsData.length
-                              }
-                            >
-                              <Label style={{ fontWeight: "bold" }}>
-                                {TitleCase(groupItem)}
-                              </Label>
-                            </TableCell>
-                          </TableRow>
+                          <TableGroupHeaderCell
+                            label={groupItem}
+                            colspan={
+                              props.selectionMode
+                                ? columnsData.length + 1
+                                : columnsData.length
+                            }
+                          />
                         )}
                         {rows.map(
                           ({ item, selected, appearance, rowId }, index) => {
@@ -386,7 +383,9 @@ const TableV2: React.FC<ITableV2> = (props) => {
                               <TableRow
                                 key={index}
                                 tabIndex={index}
-                                onClick={(e) => handleOnRowClick(e, rowId, item)}
+                                onClick={(e) =>
+                                  handleOnRowClick(e, rowId, item)
+                                }
                                 appearance={appearance}
                               >
                                 {props.selectionMode && (

@@ -7,6 +7,11 @@ export interface LoadingStateTableProps {
   colspan: number;
 }
 
+export interface TableGroupHeaderCellProps {
+  colspan: number;
+  label: string
+}
+
 export interface HeaderTableCellProps {
   column: ITableV2Column;
   index: number;
