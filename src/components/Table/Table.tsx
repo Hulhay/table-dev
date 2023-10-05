@@ -257,6 +257,10 @@ const TableV2: React.FC<ITableV2> = (props) => {
     props.onRowClick && props.onRowClick(row)
   };
 
+  const handleOnHeaderCellClick = (_: React.MouseEvent, column?: ITableV2Column) => {
+    props.onHeaderCellClick && props.onHeaderCellClick(column)
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {ShowSettingButton(props) && (
@@ -317,6 +321,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             index={index}
                             key={column.key}
                             onRenderHeaderCell={column.onRenderDataSource}
+                            onHeaderCellClick={handleOnHeaderCellClick}
                             moveColumn={moveColumn}
                             rearrangeColumnEnabled={
                               props.rearrangeColumnEnabled === true

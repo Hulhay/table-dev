@@ -13,6 +13,7 @@ export interface HeaderTableCellProps {
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
   rearrangeColumnEnabled: boolean;
   onRenderHeaderCell?: (column?: ITableV2Column) => JSX.Element;
+  onHeaderCellClick?: (event: React.MouseEvent, column?: ITableV2Column) => void;
 }
 
 export interface SettingTableButtonProps {
@@ -87,4 +88,5 @@ export interface ITableV2 {
   loading?: boolean;
 
   onRowClick?: (row?: any) => void;
+  onHeaderCellClick?: (column?: ITableV2Column) => void;
 }

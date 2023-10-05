@@ -13,6 +13,10 @@ const BasicControlled: React.FC = () => {
     console.log(`${row?.id} clicked`);
   };
 
+  const onHeaderCellClick = (headerColumn?: ITableV2Column) => {
+    console.log(`column ${headerColumn?.key} clicked`);
+  };
+
   return (
     <div style={{ margin: "0 15px" }}>
       <Header title="Table Basic Controlled" />
@@ -21,6 +25,10 @@ const BasicControlled: React.FC = () => {
         <strong>
           <em>onRowClick</em>
         </strong>{" "}
+        and{" "}
+        <strong>
+          <em>onHeaderCellClick</em>
+        </strong>
         Callback. <br />
         Please see the console (Ctrl + Shift + I)
       </Text>
@@ -29,6 +37,7 @@ const BasicControlled: React.FC = () => {
         dataSource={dataSource}
         resizable={false}
         onRowClick={onRowClick}
+        onHeaderCellClick={onHeaderCellClick}
       />
     </div>
   );

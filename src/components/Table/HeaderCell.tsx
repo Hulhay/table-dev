@@ -26,6 +26,7 @@ const HeaderCell: React.FC<HeaderTableCellProps> = (props) => {
     <div
       ref={props.rearrangeColumnEnabled ? (node) => ref(drop(node)) : null}
       style={{ width: "100%" }}
+      onClick={(e) => props.onHeaderCellClick?.(e, props.column)}
     >
       <Label
         style={{
