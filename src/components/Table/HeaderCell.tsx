@@ -36,8 +36,14 @@ const HeaderCell: React.FC<HeaderTableCellProps> = (props) => {
           gap: 3,
         }}
       >
-        {props.column.compare && <ArrowSort16Regular />}
-        {props.column.label}
+        {props.column.onRenderHeaderCell ? (
+          props.column.onRenderHeaderCell()
+        ) : (
+          <>
+            {props.column.compare && <ArrowSort16Regular />}
+            {props.column.label}
+          </>
+        )}
       </Label>
     </div>
   );

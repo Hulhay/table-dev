@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import {
   BasicUncontrolled,
+  CustomHeaderCell,
   Home,
   LoadingState,
   MultipleSelection,
@@ -33,6 +34,10 @@ const Navigations = createBrowserRouter([
       {
         path: "basic-uncontrolled",
         element: <BasicUncontrolled />,
+      },
+      {
+        path: "custom-header",
+        element: <CustomHeaderCell />,
       },
       {
         path: "sorting",

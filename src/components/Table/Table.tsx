@@ -306,6 +306,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             column={column}
                             index={index}
                             key={column.key}
+                            onRenderHeaderCell={column.onRenderDataSource}
                             moveColumn={moveColumn}
                             rearrangeColumnEnabled={
                               props.rearrangeColumnEnabled === true

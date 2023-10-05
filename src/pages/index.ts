@@ -1,6 +1,7 @@
 export { NotFound } from "./NotFound";
 export { Home } from "./Home";
 export { BasicUncontrolled } from "./BasicUncontrolled";
+export { CustomHeaderCell } from "./CustomHeaderCell";
 export { Sorting } from "./Sorting";
 export { SortingControlled } from "./SortingControlled";
 export { Resize } from "./Resize";

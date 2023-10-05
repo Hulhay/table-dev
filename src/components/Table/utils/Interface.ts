@@ -12,6 +12,7 @@ export interface HeaderTableCellProps {
   index: number;
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
   rearrangeColumnEnabled: boolean;
+  onRenderHeaderCell?: (column?: ITableV2Column) => JSX.Element;
 }
 
 export interface SettingTableButtonProps {
@@ -51,6 +52,7 @@ export interface ITableV2Column {
   dataIndex?: string;
   minWidth?: number;
   compare?: (a: any, b: any) => number;
+  onRenderHeaderCell?: () => JSX.Element;
   onRenderDataSource?: (data?: any) => any;
 }
 
@@ -63,10 +65,10 @@ export interface ITableV2 {
   sort?: ISort;
   onSortChange?: (sort?: ISort) => void;
 
-  resizable?: boolean;
+  resizable?: boolean; // default true
   onResizeColumn?: (columnKey?: string, width?: number) => void;
 
-  rearrangeColumnEnabled?: boolean;
+  rearrangeColumnEnabled?: boolean; // default false
   onRearrangeColumn?: (
     newColumns?: ITableV2Column[],
     columnKey?: string,
@@ -74,13 +76,13 @@ export interface ITableV2 {
     destinationIndex?: number
   ) => void;
 
-  selectionMode?: "single" | "multiselect";
+  selectionMode?: "single" | "multiselect"; // default undefined
   subtleSelection?: boolean;
   selectedRowsIndex?: number[];
   onSelectedRowsIndexChange?: (rowsIndex?: number[]) => void;
 
-  menuShowColumnEnabled?: boolean;
-  menuGroupDataSourceEnabled?: boolean;
+  menuShowColumnEnabled?: boolean; // default false
+  menuGroupDataSourceEnabled?: boolean; // default false
 
   loading?: boolean;
 }

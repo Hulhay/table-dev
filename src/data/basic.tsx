@@ -3,6 +3,7 @@ import { Status } from "../components";
 import { ITableV2Column } from "../components/Table/utils/Interface";
 import { titleCase } from "../helper";
 import { IDataSourceBasic } from "./interface";
+import CustomHeadercell from "./CustomHeadercell";
 
 export const columnsDummy: ITableV2Column[] = [
   {
@@ -43,6 +44,60 @@ export const columnsDummy: ITableV2Column[] = [
   },
 ];
 
+export const columnsCustomHeaderDummy: ITableV2Column[] = [
+  {
+    key: "title",
+    label: "Title",
+    dataIndex: "title",
+    onRenderHeaderCell: () => {
+      return <CustomHeadercell label="Title" center />;
+    },
+  },
+  {
+    key: "assignee",
+    label: "Assignee",
+    dataIndex: "assignee",
+    onRenderHeaderCell: () => {
+      return <CustomHeadercell label="Assignee" personIcon center />;
+    },
+  },
+  {
+    key: "priority",
+    label: "Priority",
+    dataIndex: "priority",
+    onRenderHeaderCell: () => {
+      return <CustomHeadercell label="Priority" center />;
+    },
+    onRenderDataSource: (data: IDataSourceBasic) => titleCase(data.priority),
+  },
+  {
+    key: "status",
+    label: "Status",
+    dataIndex: "status",
+    onRenderHeaderCell: () => {
+      return <CustomHeadercell label="Status" center />;
+    },
+    onRenderDataSource: (data: IDataSourceBasic) => {
+      return <Status status={data.status} />;
+    },
+  },
+  {
+    key: "action",
+    label: "Action",
+    onRenderHeaderCell: () => {
+      return <CustomHeadercell label="Action" center />;
+    },
+    onRenderDataSource: () => {
+      return (
+        <Icon
+          iconName="MoreVertical"
+          styles={{ root: { cursor: "pointer" } }}
+        />
+      );
+    },
+  },
+];
+
 export const columnsSortingDummy: ITableV2Column[] = [
   {
     key: "title",
@@ -55,6 +110,9 @@ export const columnsSortingDummy: ITableV2Column[] = [
     dataIndex: "assignee",
     compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
       return a.assignee.localeCompare(b.assignee);
+    },
+    onRenderHeaderCell: () => {
+      return <CustomHeadercell label="Assignee" personIcon />;
     },
   },
   {

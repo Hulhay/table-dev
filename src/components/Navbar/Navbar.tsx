@@ -18,6 +18,11 @@ const navLink: INavLinkGroup[] = [
         key: "basic-uncontrolled",
       },
       {
+        name: "Custom Header",
+        url: "/custom-header",
+        key: "custom-header",
+      },
+      {
         name: "Sorting Uncontrolled",
         url: "/sorting",
         key: "sorting",
