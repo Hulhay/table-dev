@@ -11,7 +11,6 @@ import {
 } from "@fluentui/react-components";
 import React from "react";
 import { MenuShowColumnTableProps } from "./utils/Interface";
-import { TitleCase } from "./utils/Helper";
 
 const MenuShowHideColumn: React.FC<MenuShowColumnTableProps> = (props) => {
   return (
@@ -34,7 +33,7 @@ const MenuShowHideColumn: React.FC<MenuShowColumnTableProps> = (props) => {
                   value={checkedValue}
                   key={checkedValue}
                 >
-                  {TitleCase(checkedValue)}
+                  {checkedValue}
                 </MenuItemCheckbox>
               );
             })}
@@ -49,7 +48,7 @@ const MenuShowHideColumn: React.FC<MenuShowColumnTableProps> = (props) => {
                   value={uncheckedValue}
                   key={uncheckedValue}
                 >
-                  {TitleCase(uncheckedValue)}
+                  {uncheckedValue}
                 </MenuItemCheckbox>
               );
             })}

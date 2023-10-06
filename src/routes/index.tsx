@@ -18,6 +18,7 @@ import {
   SettingGroupData,
   SettingGroupDataControlled,
   SettingShowColumn,
+  SettingShowColumnControlled,
   SingleSelection,
   SingleSelectionControlled,
   Sorting,
@@ -94,6 +95,10 @@ const Navigations = createBrowserRouter([
       {
         path: "setting-show-column",
         element: <SettingShowColumn />,
+      },
+      {
+        path: "setting-show-column-controlled",
+        element: <SettingShowColumnControlled />,
       },
       {
         path: "setting-group-data",

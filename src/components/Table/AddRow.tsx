@@ -4,6 +4,7 @@ import { AddRowTableProps } from "./utils/Interface";
 
 const AddRow: React.FC<AddRowTableProps> = (props) => {
   const [bgColor, setBgColor] = useState("#ffffff");
+
   return (
     <TableRow>
       <TableCell

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
   MenuProps,
@@ -22,7 +22,6 @@ import {
   GetTableColumnSizingOptions,
   GetUniqueFromData,
   Reorder,
-  SetDisplayColumns,
   ShowSettingButton,
 } from "./utils/Helper";
 import { DndProvider } from "react-dnd";
@@ -35,17 +34,25 @@ import BodyRow from "./BodyRow";
 import HeaderRow from "./HeaderRow";
 
 const TableV2: React.FC<ITableV2> = (props) => {
-  const defaultDisplayColumn = props.defaultColumns
-    ? props.defaultColumns.map((obj) => obj.key)
-    : props.columns
-    ? props.columns.map((obj) => obj.key)
-    : [];
-
-  const [defaultColumns, setDefaultColumns] = useState<ITableV2Column[]>(
+  // =======
+  // Columns
+  // =======
+  const [defaultColumns] = useState<ITableV2Column[]>(
     props.defaultColumns || []
   );
   const columnsData = props.columns || defaultColumns;
 
+  const [displayColumnsData, setDisplayColumnsData] = useState(
+    columnsData.filter((obj) => !obj.hidden)
+  );
+
+  useEffect(() => {
+    setDisplayColumnsData(columnsData.filter((obj) => !obj.hidden));
+  }, [columnsData]);
+
+  // ===========
+  // Data Source
+  // ===========
   const [defaultDataSource, setDefaultDataSource] = useState(
     props.defaultDataSource || []
   );
@@ -56,8 +63,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
   );
 
   const {
-    tableRef,
     getRows,
+    tableRef,
     columnSizing_unstable,
     sort: { getSortDirection, toggleColumnSort, sort },
     selection: {
@@ -69,7 +76,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     },
   } = useTableFeatures(
     {
-      columns: CreateColumnHeader(columnsData),
+      columns: CreateColumnHeader(displayColumnsData),
       items: dataSource,
     },
     [
@@ -112,32 +119,19 @@ const TableV2: React.FC<ITableV2> = (props) => {
   );
 
   const headerSortProps = (columnId: TableColumnId) => ({
+    sortDirection: getSortDirection(columnId),
     onClick: (e: React.MouseEvent) => {
       toggleColumnSort(e, columnId);
     },
-    sortDirection: getSortDirection(columnId),
   });
-
-  const onColumnMove = (sourceIndex: number, destinationIndex: number) => {
-    const newOrderHeader = Reorder(columnsData, sourceIndex, destinationIndex);
-
-    props.defaultColumns && setDefaultColumns(newOrderHeader);
-    props.columns &&
-      props.onRearrangeColumn?.(
-        newOrderHeader,
-        columnsData[sourceIndex].key,
-        sourceIndex,
-        destinationIndex
-      );
-  };
 
   const columnsShow = useMemo(
     () => GetColumnKeyShow(columnsData),
     [columnsData]
   );
   const columnsHidden = useMemo(
-    () => GetColumnKeyHidden(columnsShow, dataSource),
-    []
+    () => GetColumnKeyHidden(columnsData),
+    [columnsData]
   );
 
   const [columnsCheckedValues, setcolumnsCheckedValues] = useState<
@@ -168,10 +162,16 @@ const TableV2: React.FC<ITableV2> = (props) => {
         return prev ? { ...prev, ["hidden"]: hidden } : { ["hidden"]: hidden };
       });
 
-      const newColumns = columnsData.filter((item) =>
-        checked.includes(item.key)
+      const newColumns = displayColumnsData.filter((item) =>
+        checked.includes(item.label)
       );
-      setDefaultColumns(newColumns);
+
+      const [hiddenColumn] = displayColumnsData.filter(
+        (item) => !newColumns.includes(item)
+      );
+
+      props.defaultColumns && setDisplayColumnsData(newColumns);
+      props.onShowHideColumn?.(hiddenColumn, "hide");
 
       return;
     }
@@ -187,13 +187,13 @@ const TableV2: React.FC<ITableV2> = (props) => {
         return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
       });
 
-      const newDisplayColumns = SetDisplayColumns(
-        columnsData,
-        checkedItems[0],
-        defaultDisplayColumn,
-        props.defaultColumns || props.columns
-      );
-      setDefaultColumns(newDisplayColumns);
+      const column = columnsData.find(
+        (obj) => obj.label === checkedItems[0]
+      ) as ITableV2Column;
+
+      props.defaultColumns &&
+        setDisplayColumnsData((prev) => [...prev, column]);
+      props.onShowHideColumn?.(column, "show");
 
       return;
     }
@@ -234,6 +234,28 @@ const TableV2: React.FC<ITableV2> = (props) => {
     })
   );
 
+  // ================
+  // Handler Function
+  // ================
+  const handleOnColumnMove = (
+    sourceIndex: number,
+    destinationIndex: number
+  ) => {
+    const newOrderColumns = Reorder(
+      displayColumnsData,
+      sourceIndex,
+      destinationIndex
+    );
+
+    props.defaultColumns && setDisplayColumnsData(newOrderColumns);
+    props.onRearrangeColumn?.(
+      newOrderColumns,
+      displayColumnsData[sourceIndex].key,
+      sourceIndex,
+      destinationIndex
+    );
+  };
+
   const handleOnRowClick = (
     e: React.MouseEvent,
     rowId: TableRowId,
@@ -252,9 +274,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
   const handleOnAddRowClick = (groupItem?: string) => {
     const defaultId = GenerateUniqueID();
-    const defaultNewRow = {
-      id: `row-${defaultId}`,
-    };
+    const defaultNewRow = { id: `row-${defaultId}` };
     props.onAddRowClick?.(
       [...dataSource, defaultNewRow],
       defaultNewRow,
@@ -292,9 +312,9 @@ const TableV2: React.FC<ITableV2> = (props) => {
             {/* Table Header */}
             <TableHeader>
               <HeaderRow
-                columnsData={columnsData}
-                onColumnMove={onColumnMove}
                 toggleAllRows={toggleAllRows}
+                columnsData={displayColumnsData}
+                onColumnMove={handleOnColumnMove}
                 headerSortProps={headerSortProps}
                 selectionMode={props.selectionMode}
                 onHeaderCellClick={handleOnHeaderCellClick}
@@ -315,8 +335,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
                 <LoadingState
                   colspan={
                     props.selectionMode
-                      ? columnsData.length + 1
-                      : columnsData.length
+                      ? displayColumnsData.length + 1
+                      : displayColumnsData.length
                   }
                 />
               ) : (
@@ -331,8 +351,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             label={groupItem}
                             colspan={
                               props.selectionMode
-                                ? columnsData.length + 1
-                                : columnsData.length
+                                ? displayColumnsData.length + 1
+                                : displayColumnsData.length
                             }
                           />
                         )}
@@ -350,7 +370,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                                 index={index}
                                 selected={selected}
                                 appearance={appearance}
-                                columnsData={columnsData}
+                                columnsData={displayColumnsData}
                                 onRowClick={handleOnRowClick}
                                 selectionMode={props.selectionMode}
                                 subtleSelection={props.subtleSelection}
@@ -366,8 +386,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             onAddRowClick={() => handleOnAddRowClick(groupItem)}
                             colspan={
                               props.selectionMode
-                                ? columnsData.length + 1
-                                : columnsData.length
+                                ? displayColumnsData.length + 1
+                                : displayColumnsData.length
                             }
                           />
                         )}

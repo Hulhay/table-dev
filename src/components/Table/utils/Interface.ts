@@ -93,6 +93,8 @@ export interface MenuGroupByTableProps {
   ) => void;
 }
 
+export type ShowHideMode = "show" | "hide";
+
 export interface ISort {
   sortDirection?: "ascending" | "descending";
   sortColumn?: string;
@@ -102,6 +104,7 @@ export interface ITableV2Column {
   key: string;
   label: string;
   dataIndex?: string;
+  hidden?: boolean;
   minWidth?: number;
   compare?: (a: any, b: any) => number;
   onRenderHeaderCell?: () => JSX.Element;
@@ -129,6 +132,11 @@ export interface ITableV2 {
     columnKey?: string,
     sourceIndex?: number,
     destinationIndex?: number
+  ) => void;
+
+  onShowHideColumn?: (
+    column?: ITableV2Column,
+    mode?: ShowHideMode
   ) => void;
 
   selectionMode?: "single" | "multiselect"; // default undefined

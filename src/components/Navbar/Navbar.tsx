@@ -88,6 +88,11 @@ const navLink: INavLinkGroup[] = [
         key: "setting-show-column",
       },
       {
+        name: "Menu Show Column Controlled",
+        url: "/setting-show-column-controlled",
+        key: "setting-show-column-controlled",
+      },
+      {
         name: "Menu Group Data Uncontrolled",
         url: "/setting-group-data",
         key: "setting-group-data",

@@ -41,6 +41,7 @@ const HeaderRow: React.FC<HeaderRowProps> = (props) => {
       {props.columnsData.map((column: ITableV2Column, index: number) => {
         return (
           <HeaderCellWrapper
+            key={column.key}
             index={index}
             column={column}
             onColumnMove={props.onColumnMove}

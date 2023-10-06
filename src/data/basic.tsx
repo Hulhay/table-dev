@@ -256,6 +256,63 @@ export const columnsDummyAddRowSpesificGroup: ITableV2Column[] = [
   },
 ];
 
+export const columnsDummyAll: ITableV2Column[] = [
+  {
+    key: "id",
+    label: "ID",
+    dataIndex: "id",
+    minWidth: 50,
+    hidden: true,
+  },
+  {
+    key: "title",
+    label: "Title",
+    dataIndex: "title",
+    minWidth: 250,
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.title.localeCompare(b.title);
+    },
+  },
+  {
+    key: "assignee",
+    label: "Assignee",
+    dataIndex: "assignee",
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.assignee.localeCompare(b.assignee);
+    },
+  },
+  {
+    key: "priority",
+    label: "Priority",
+    dataIndex: "priority",
+    onRenderDataSource: (data: IDataSourceBasic) => titleCase(data.priority),
+  },
+  {
+    key: "status",
+    label: "Status",
+    dataIndex: "status",
+    onRenderDataSource: (data: IDataSourceBasic) => {
+      return <Status status={data.status} />;
+    },
+  },
+  {
+    key: "createdBy",
+    label: "Created By",
+    dataIndex: "createdBy",
+    hidden: true,
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.createdBy.localeCompare(b.createdBy);
+    },
+  },
+  {
+    key: "domain",
+    label: "Domain",
+    dataIndex: "domain",
+    hidden: true,
+    minWidth: 60,
+  },
+];
+
 export const dataSourceDummy: IDataSourceBasic[] = [
   {
     id: "task-1",

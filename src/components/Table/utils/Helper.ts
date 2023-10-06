@@ -67,50 +67,11 @@ export const TitleCase = (
 };
 
 export const GetColumnKeyShow = (column: ITableV2Column[]): string[] => {
-  return column.map((obj) => obj.key);
+  return column.filter((obj) => !obj.hidden).map((obj) => obj.label);
 };
 
-export const GetColumnKeyHidden = (
-  columnShow: string[],
-  dataSource: any[]
-): string[] => {
-  const columnHidden: string[] = [];
-  Object.keys(dataSource[0]).forEach((field) => {
-    if (!columnShow.includes(field)) {
-      columnHidden.push(field);
-    }
-  });
-  return columnHidden;
-};
-
-export const SetDisplayColumns = (
-  prevColumn: ITableV2Column[],
-  checkedItem: string,
-  initialColumnKeys: string[],
-  initialColumns?: ITableV2Column[]
-): ITableV2Column[] => {
-  const newColumns = [...prevColumn];
-  if (initialColumnKeys.includes(checkedItem)) {
-    const foundItem = initialColumns?.find((obj) => obj.key === checkedItem);
-
-    if (foundItem) {
-      newColumns.push({
-        key: foundItem.key,
-        label: TitleCase(foundItem.label),
-        dataIndex: foundItem.dataIndex,
-        compare: foundItem.compare,
-        onRenderDataSource: foundItem.onRenderDataSource,
-      });
-    }
-  } else {
-    newColumns.push({
-      key: checkedItem,
-      label: TitleCase(checkedItem),
-      dataIndex: checkedItem,
-    });
-  }
-
-  return newColumns;
+export const GetColumnKeyHidden = (column: ITableV2Column[]): string[] => {
+  return column.filter((obj) => obj.hidden).map((obj) => obj.label);
 };
 
 export const ShowSettingButton = (props: ITableV2) => {
