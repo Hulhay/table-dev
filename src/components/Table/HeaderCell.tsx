@@ -16,7 +16,7 @@ const HeaderCell: React.FC<HeaderTableCellProps> = (props) => {
     accept: "COLUMN",
     hover: (draggedItem: { index: number }) => {
       if (draggedItem.index !== index) {
-        props.moveColumn(draggedItem.index, index);
+        props.onColumnMove(draggedItem.index, index);
         draggedItem.index = index;
       }
     },

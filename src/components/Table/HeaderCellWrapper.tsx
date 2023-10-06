@@ -28,7 +28,7 @@ const HeaderCellWrapper: React.FC<HeaderCellWrapperProps> = (props) => {
             key={props.column.key}
             onRenderHeaderCell={props.column.onRenderDataSource}
             onHeaderCellClick={props.onHeaderCellClick}
-            moveColumn={props.moveColumn}
+            onColumnMove={props.onColumnMove}
             rearrangeColumnEnabled={props.rearrangeColumnEnabled}
           />
         </TableHeaderCell>

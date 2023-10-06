@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
   MenuProps,
+  SortDirection,
   Table,
   TableBody,
   TableColumnId,
@@ -54,10 +55,6 @@ const TableV2: React.FC<ITableV2> = (props) => {
     GetTableColumnSizingOptions(defaultColumns)
   );
 
-  const sortableColumns = columnsData.filter(
-    (col) => col.compare !== undefined
-  );
-
   const {
     tableRef,
     getRows,
@@ -83,23 +80,10 @@ const TableV2: React.FC<ITableV2> = (props) => {
         },
       }),
       useTableSort({
-        defaultSortState:
-          props.sort === undefined
-            ? {
-                sortColumn:
-                  sortableColumns.length > 0
-                    ? sortableColumns[0].key
-                    : undefined,
-                sortDirection: "ascending",
-              }
-            : undefined,
         sortState: props.sort
           ? {
               sortColumn: props.sort?.sortColumn,
-              sortDirection:
-                props.sort?.sortDirection === "ascending"
-                  ? "ascending"
-                  : "descending",
+              sortDirection: props.sort?.sortDirection as SortDirection,
             }
           : undefined,
         onSortChange: props.onSortChange
@@ -134,7 +118,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     sortDirection: getSortDirection(columnId),
   });
 
-  const moveColumn = (sourceIndex: number, destinationIndex: number) => {
+  const onColumnMove = (sourceIndex: number, destinationIndex: number) => {
     const newOrderHeader = Reorder(columnsData, sourceIndex, destinationIndex);
 
     props.defaultColumns && setDefaultColumns(newOrderHeader);
@@ -227,8 +211,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     { name, checkedItems }
   ) => {
     if (props.groupBy) {
-      props.onGroupByChange &&
-        props.onGroupByChange(groupBy["groupby"][0], checkedItems[0]);
+      props.onGroupByChange?.(groupBy["groupby"][0], checkedItems[0]);
     } else {
       setDefaultGroupBy((prev) => ({ ...prev, [name]: checkedItems }));
     }
@@ -257,14 +240,14 @@ const TableV2: React.FC<ITableV2> = (props) => {
     row: any
   ) => {
     toggleRow(e, rowId);
-    props.onRowClick && props.onRowClick(row);
+    props.onRowClick?.(row);
   };
 
   const handleOnHeaderCellClick = (
     _?: React.MouseEvent,
     column?: ITableV2Column
   ) => {
-    props.onHeaderCellClick && props.onHeaderCellClick(column);
+    props.onHeaderCellClick?.(column);
   };
 
   const handleOnAddRowClick = (groupItem?: string) => {
@@ -272,12 +255,11 @@ const TableV2: React.FC<ITableV2> = (props) => {
     const defaultNewRow = {
       id: `row-${defaultId}`,
     };
-    props.onAddRowClick &&
-      props.onAddRowClick(
-        [...dataSource, defaultNewRow],
-        defaultNewRow,
-        groupItem
-      );
+    props.onAddRowClick?.(
+      [...dataSource, defaultNewRow],
+      defaultNewRow,
+      groupItem
+    );
 
     props.defaultDataSource &&
       setDefaultDataSource((prev) => [...prev, defaultNewRow]);
@@ -310,8 +292,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
             {/* Table Header */}
             <TableHeader>
               <HeaderRow
-                moveColumn={moveColumn}
                 columnsData={columnsData}
+                onColumnMove={onColumnMove}
                 toggleAllRows={toggleAllRows}
                 headerSortProps={headerSortProps}
                 selectionMode={props.selectionMode}

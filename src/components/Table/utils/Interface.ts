@@ -29,7 +29,7 @@ export interface TableGroupHeaderCellProps {
 export interface HeaderTableCellProps {
   column: ITableV2Column;
   index: number;
-  moveColumn: (dragIndex: number, hoverIndex: number) => void;
+  onColumnMove: (dragIndex: number, hoverIndex: number) => void;
   rearrangeColumnEnabled: boolean;
   onRenderHeaderCell?: (column?: ITableV2Column) => JSX.Element;
   onHeaderCellClick?: (
@@ -41,7 +41,7 @@ export interface HeaderTableCellProps {
 export interface HeaderCellWrapperProps {
   column: ITableV2Column;
   index: number;
-  moveColumn: (dragIndex: number, hoverIndex: number) => void;
+  onColumnMove: (dragIndex: number, hoverIndex: number) => void;
   columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
   rearrangeColumnEnabled: boolean;
   headerSortProps: (columnId: TableColumnId) => {

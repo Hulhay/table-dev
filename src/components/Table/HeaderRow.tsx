@@ -13,7 +13,7 @@ export interface HeaderRowProps {
   columnsData: ITableV2Column[];
   selectionMode?: "single" | "multiselect";
   checked: boolean | "mixed";
-  moveColumn: (dragIndex: number, hoverIndex: number) => void;
+  onColumnMove: (dragIndex: number, hoverIndex: number) => void;
   columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
   rearrangeColumnEnabled: boolean;
   headerSortProps: (columnId: TableColumnId) => {
@@ -43,7 +43,7 @@ const HeaderRow: React.FC<HeaderRowProps> = (props) => {
           <HeaderCellWrapper
             index={index}
             column={column}
-            moveColumn={props.moveColumn}
+            onColumnMove={props.onColumnMove}
             headerSortProps={props.headerSortProps}
             onHeaderCellClick={props.onHeaderCellClick}
             columnSizing_unstable={props.columnSizing_unstable}
