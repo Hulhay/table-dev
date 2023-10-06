@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import {
   AddRow,
+  AddRowExternalButton,
   AddRowInSpesificGroup,
   BasicControlled,
   BasicUncontrolled,
@@ -51,6 +52,10 @@ const Navigations = createBrowserRouter([
       {
         path: "add-row",
         element: <AddRow />,
+      },
+      {
+        path: "add-row-external-button",
+        element: <AddRowExternalButton />,
       },
       {
         path: "sorting",

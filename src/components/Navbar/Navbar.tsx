@@ -33,6 +33,11 @@ const navLink: INavLinkGroup[] = [
         key: "add-row",
       },
       {
+        name: "Add Row Using External Button",
+        url: "/add-row-external-button",
+        key: "add-row-external-button",
+      },
+      {
         name: "Sorting Uncontrolled",
         url: "/sorting",
         key: "sorting",
