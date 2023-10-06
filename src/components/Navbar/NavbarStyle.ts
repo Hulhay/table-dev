@@ -2,7 +2,7 @@ import { INavStyles } from '@fluentui/react';
 
 export const navbarStyles: Partial<INavStyles> = {
   root: {
-    width: 200,
+    width: 270,
     height: '100vh',
     border: '1px solid #eeeeee',
   },

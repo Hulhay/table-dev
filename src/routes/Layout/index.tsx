@@ -8,7 +8,7 @@ const Layout = () => {
       <div style={{ position: "fixed", backgroundColor: "white" }}>
         <Navbar />
       </div>
-      <div style={{ marginLeft: 200, width: "calc(100% - 250px)" }}>
+      <div style={{ marginLeft: 270, width: "calc(100% - 250px)" }}>
         <Outlet />
       </div>
     </div>
