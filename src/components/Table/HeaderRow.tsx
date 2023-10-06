@@ -1,31 +1,7 @@
-import {
-  SortDirection,
-  TableColumnId,
-  TableFeaturesState,
-  TableRow,
-  TableSelectionCell,
-} from "@fluentui/react-components";
+import { TableRow, TableSelectionCell } from "@fluentui/react-components";
 import React from "react";
 import HeaderCellWrapper from "./HeaderCellWrapper";
-import { ITableV2Column } from "./utils/Interface";
-
-export interface HeaderRowProps {
-  columnsData: ITableV2Column[];
-  selectionMode?: "single" | "multiselect";
-  checked: boolean | "mixed";
-  onColumnMove: (dragIndex: number, hoverIndex: number) => void;
-  columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
-  rearrangeColumnEnabled: boolean;
-  headerSortProps: (columnId: TableColumnId) => {
-    onClick: (e: React.MouseEvent) => void;
-    sortDirection: SortDirection | undefined;
-  };
-  onHeaderCellClick?: (
-    event?: React.MouseEvent,
-    column?: ITableV2Column
-  ) => void;
-  toggleAllRows: (e: React.MouseEvent) => void;
-}
+import { HeaderRowProps, ITableV2Column } from "./utils/Interface";
 
 const HeaderRow: React.FC<HeaderRowProps> = (props) => {
   return (

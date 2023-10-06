@@ -26,6 +26,24 @@ export interface TableGroupHeaderCellProps {
   label: string;
 }
 
+export interface HeaderRowProps {
+  columnsData: ITableV2Column[];
+  selectionMode?: "single" | "multiselect";
+  checked: boolean | "mixed";
+  onColumnMove: (dragIndex: number, hoverIndex: number) => void;
+  columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
+  rearrangeColumnEnabled: boolean;
+  headerSortProps: (columnId: TableColumnId) => {
+    onClick: (e: React.MouseEvent) => void;
+    sortDirection: SortDirection | undefined;
+  };
+  onHeaderCellClick?: (
+    event?: React.MouseEvent,
+    column?: ITableV2Column
+  ) => void;
+  toggleAllRows: (e: React.MouseEvent) => void;
+}
+
 export interface HeaderTableCellProps {
   column: ITableV2Column;
   index: number;
