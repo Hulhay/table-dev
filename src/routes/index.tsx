@@ -14,6 +14,7 @@ import {
   MultipleSelection,
   MultipleSelectionControlled,
   NotFound,
+  PutItAll,
   RearrangeColumn,
   RearrangeColumnControlled,
   Resize,
@@ -130,6 +131,10 @@ const Navigations = createBrowserRouter([
       {
         path: "loading-state",
         element: <LoadingState />,
+      },
+      {
+        path: "put-it-all",
+        element: <PutItAll />,
       },
     ],
   },

@@ -127,6 +127,11 @@ const navLink: INavLinkGroup[] = [
         url: "/loading-state",
         key: "loading-state",
       },
+      {
+        name: "Put It All",
+        url: "/put-it-all",
+        key: "put-it-all",
+      },
     ],
   },
 ];

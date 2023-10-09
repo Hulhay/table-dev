@@ -23,3 +23,4 @@ export { AddColumn } from "./AddColumn";
 export { AddColumnControlled } from "./AddColumnControlled";
 export { AddRowInSpesificGroup } from "./AddRowInSpesificGroup";
 export { LoadingState } from "./LoadingState";
+export { PutItAll } from "./PutItAll";
