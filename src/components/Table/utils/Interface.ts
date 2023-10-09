@@ -124,6 +124,7 @@ export interface ITableV2Column {
   dataIndex?: string;
   hidden?: boolean;
   minWidth?: number;
+  width?: number;
   compare?: (a: any, b: any) => number;
   onRenderHeaderCell?: () => JSX.Element;
   onRenderDataSource?: (data?: any) => any;

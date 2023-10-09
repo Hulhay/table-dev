@@ -27,11 +27,10 @@ export const GetTableColumnSizingOptions = (
 ): TableColumnSizingOptions => {
   const columnSizingOptions: TableColumnSizingOptions = {};
   columns.forEach((column) => {
-    if (column.minWidth) {
-      columnSizingOptions[column.key] = {
-        minWidth: column.minWidth,
-      };
-    }
+    columnSizingOptions[column.key] = {
+      idealWidth: column.width,
+      minWidth: column.minWidth,
+    };
   });
 
   return columnSizingOptions;

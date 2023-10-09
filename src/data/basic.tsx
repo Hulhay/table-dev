@@ -151,6 +151,13 @@ export const columnsSortingDummy: ITableV2Column[] = [
 
 export const columnsWidthDummy: ITableV2Column[] = [
   {
+    key: "id",
+    label: "ID",
+    dataIndex: "id",
+    minWidth: 50,
+    width: 50,
+  },
+  {
     key: "title",
     label: "Title",
     dataIndex: "title",
