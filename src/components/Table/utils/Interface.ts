@@ -91,6 +91,13 @@ export interface SettingTableButtonProps {
 
   menuGroupDataSourceEnabled?: boolean;
   groupByTableProps: MenuGroupByTableProps;
+
+  menuAddColumnEnabled?: boolean;
+  addColumnProps: MenuAddColumnProps;
+}
+
+export interface MenuAddColumnProps {
+  onAddColumnClick: () => void;
 }
 
 export interface MenuShowColumnTableProps {
@@ -153,10 +160,7 @@ export interface ITableV2 {
     destinationIndex?: number
   ) => void;
 
-  onShowHideColumn?: (
-    column?: ITableV2Column,
-    mode?: ShowHideMode
-  ) => void;
+  onShowHideColumn?: (column?: ITableV2Column, mode?: ShowHideMode) => void;
 
   selectionMode?: "single" | "multiselect"; // default undefined
   subtleSelection?: boolean;
@@ -165,6 +169,7 @@ export interface ITableV2 {
 
   menuShowColumnEnabled?: boolean; // default false
   menuGroupDataSourceEnabled?: boolean; // default false
+  menuAddColumnEnabled?: boolean; // default false
 
   loading?: boolean; // default false
 
@@ -173,4 +178,6 @@ export interface ITableV2 {
 
   onRowClick?: (row?: any) => void;
   onHeaderCellClick?: (column?: ITableV2Column) => void;
+
+  onAddColumnClick?: (newColumn?: ITableV2Column) => void;
 }

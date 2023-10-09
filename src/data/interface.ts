@@ -6,4 +6,5 @@ export interface IDataSourceBasic {
   assignee: string;
   createdBy: string;
   domain: string;
+  [key: string]: any;
 }

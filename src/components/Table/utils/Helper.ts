@@ -8,6 +8,7 @@ import { useMemo } from "react";
 
 export const CreateColumnHeader = (defaultColumns: ITableV2Column[]) =>
   useMemo(() => {
+    // console.log(defaultColumns)
     const columns: TableColumnDefinition<any>[] = [];
 
     defaultColumns.forEach((column: ITableV2Column) => {
@@ -74,7 +75,11 @@ export const GetColumnKeyHidden = (column: ITableV2Column[]): string[] => {
 };
 
 export const ShowSettingButton = (props: ITableV2) => {
-  return props.menuShowColumnEnabled || props.menuGroupDataSourceEnabled;
+  return (
+    props.menuShowColumnEnabled ||
+    props.menuGroupDataSourceEnabled ||
+    props.menuAddColumnEnabled
+  );
 };
 
 export const GetUniqueFromData = (dataSource: any[], field: string) => {

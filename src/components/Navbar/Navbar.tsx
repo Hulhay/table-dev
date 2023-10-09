@@ -108,6 +108,16 @@ const navLink: INavLinkGroup[] = [
         key: "setting-group-data-controlled",
       },
       {
+        name: "Add Column Uncontrolled",
+        url: "/add-column",
+        key: "add-column",
+      },
+      {
+        name: "Add Column Controlled",
+        url: "/add-column-controlled",
+        key: "add-column-controlled",
+      },
+      {
         name: "Add Row In Spesific Group",
         url: "/add-row-in-spesific-group",
         key: "add-row-in-spesific-group",

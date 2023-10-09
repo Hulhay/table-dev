@@ -9,6 +9,7 @@ import React from "react";
 import { SettingTableButtonProps } from "./utils/Interface";
 import MenuShowHideColumn from "./MenuShowHideColumn";
 import MenuGroupBy from "./MenuGroupBy";
+import MenuAddColumn from "./MenuAddColumn";
 
 const SettingButton: React.FC<SettingTableButtonProps> = (props) => {
   return (
@@ -28,6 +29,9 @@ const SettingButton: React.FC<SettingTableButtonProps> = (props) => {
             )}
             {props.menuGroupDataSourceEnabled && (
               <MenuGroupBy key="groupby" {...props.groupByTableProps} />
+            )}
+            {props.menuAddColumnEnabled && (
+              <MenuAddColumn key={"addcolumn"} {...props.addColumnProps} />
             )}
           </MenuList>
         </MenuPopover>

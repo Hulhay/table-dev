@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import {
+  AddColumn,
+  AddColumnControlled,
   AddRow,
   AddRowExternalButton,
   AddRowInSpesificGroup,
@@ -112,6 +114,14 @@ const Navigations = createBrowserRouter([
       {
         path: "setting-group-data-controlled",
         element: <SettingGroupDataControlled />,
+      },
+      {
+        path: "add-column",
+        element: <AddColumn />,
+      },
+      {
+        path: "add-column-controlled",
+        element: <AddColumnControlled />,
       },
       {
         path: "add-row-in-spesific-group",

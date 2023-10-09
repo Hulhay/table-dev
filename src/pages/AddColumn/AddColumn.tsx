@@ -2,21 +2,20 @@ import React from "react";
 import { Header, TableV2 } from "../../components";
 import { columnsDummyAll, dataSourceDummy } from "../../data/basic";
 
-const SettingGroupData: React.FC = () => {
+const AddColumn: React.FC = () => {
   return (
     <div style={{ margin: "0 15px" }}>
-      <Header title="Menu Group Data Uncontrolled" />
+      <Header title="Add Column Uncontrolled" />
       <TableV2
         defaultColumns={columnsDummyAll}
         defaultDataSource={dataSourceDummy}
-        resizable={false}
-        selectionMode="multiselect"
+        resizable={true}
         rearrangeColumnEnabled={true}
         menuShowColumnEnabled={true}
-        menuGroupDataSourceEnabled={true}
+        menuAddColumnEnabled={true}
       />
     </div>
   );
 };
 
-export default SettingGroupData;
+export default AddColumn;

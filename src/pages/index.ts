@@ -19,5 +19,7 @@ export { SettingShowColumn } from "./SettingShowColumn";
 export { SettingShowColumnControlled } from "./SettingShowColumnControlled";
 export { SettingGroupData } from "./SettingGroupData";
 export { SettingGroupDataControlled } from "./SettingGroupDataControlled";
+export { AddColumn } from "./AddColumn";
+export { AddColumnControlled } from "./AddColumnControlled";
 export { AddRowInSpesificGroup } from "./AddRowInSpesificGroup";
 export { LoadingState } from "./LoadingState";

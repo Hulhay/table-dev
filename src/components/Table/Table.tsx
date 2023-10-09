@@ -37,7 +37,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
   // =======
   // Columns
   // =======
-  const [defaultColumns] = useState<ITableV2Column[]>(
+  const [defaultColumns, setDefaultColumns] = useState<ITableV2Column[]>(
     props.defaultColumns || []
   );
   const columnsData = props.columns || defaultColumns;
@@ -144,6 +144,11 @@ const TableV2: React.FC<ITableV2> = (props) => {
   >({
     hidden: columnsHidden,
   });
+
+  useEffect(() => {
+    setcolumnsCheckedValues({ show: columnsShow });
+  }, [columnsShow]);
+
   const onColumnsCheckedValueChange: MenuProps["onCheckedValueChange"] = (
     _,
     { name, checkedItems }
@@ -285,12 +290,43 @@ const TableV2: React.FC<ITableV2> = (props) => {
       setDefaultDataSource((prev) => [...prev, defaultNewRow]);
   };
 
+  const handleOnAddColumnClick = () => {
+    const defaultId = GenerateUniqueID();
+    const defaultNewColumn: ITableV2Column = {
+      key: `col-${defaultId}`,
+      label: `Col-${defaultId}`,
+    };
+
+    props.onAddColumnClick?.(defaultNewColumn);
+
+    const { show } = columnsCheckedValues;
+    if (props.defaultColumns) {
+      show.push(defaultNewColumn.label);
+      setcolumnsCheckedValues((prev) => {
+        return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
+      });
+
+      setDefaultColumns((prev) => [...prev, defaultNewColumn]);
+      setDisplayColumnsData((prev) => [...prev, defaultNewColumn]);
+    }
+  };
+
+  // useEffect(() => {
+  //   const { show } = columnsCheckedValues;
+  //   show.push("something");
+  //   setcolumnsCheckedValues((prev) => {
+  //     return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
+  //   });
+  // }, [columnsData]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {ShowSettingButton(props) && (
         <SettingButton
+          menuAddColumnEnabled={props.menuAddColumnEnabled}
           menuShowColumnEnabled={props.menuShowColumnEnabled}
           menuGroupDataSourceEnabled={props.menuGroupDataSourceEnabled}
+          addColumnProps={{ onAddColumnClick: handleOnAddColumnClick }}
           showColumnTableProps={{
             checkedValues: columnsCheckedValues,
             uncheckedValues: columnsUncheckedValues,
