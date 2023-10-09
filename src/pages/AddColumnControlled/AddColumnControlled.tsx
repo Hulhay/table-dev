@@ -23,16 +23,18 @@ const AddColumnControlled: React.FC = () => {
 
   const onAddColumnClick = () => {
     const label = prompt("New column :");
-    if (label) {
+    const defaultValue = prompt("Default value :");
+    if (label && defaultValue) {
       const newColumn: ITableV2Column = {
         key: label,
         label: label,
+        dataIndex: label,
       };
       setColumns((prev) => [...prev, newColumn]);
 
       const updatedDataSource = dataSource.map((ds) => ({
         ...ds,
-        [label]: Math.random().toString(16).slice(2),
+        [label]: defaultValue,
       }));
       setDataSource(updatedDataSource);
     }

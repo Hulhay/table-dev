@@ -24,10 +24,10 @@ const BodyRow: React.FC<BodyRowProps> = (props) => {
       )}
 
       {/* Table Cell */}
-      {props.columnsData.map((column: ITableV2Column) => {
+      {props.columnsData.map((column: ITableV2Column, index: number) => {
         return (
           <TableCell
-            key={props.item[column.dataIndex || column.key]}
+            key={index}
             {...props.columnSizing_unstable.getTableCellProps(column.key)}
           >
             {column.onRenderDataSource
