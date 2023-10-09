@@ -159,7 +159,7 @@ const PutItAll: React.FC = () => {
         }}
       >
         <Button
-          onClick={onAddRowClick}
+          onClick={onAddColumnClick}
           style={{ margin: "5px 0", flexGrow: 1 }}
         >
           Add New Column
