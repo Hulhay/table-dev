@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
   MenuProps,
@@ -19,8 +19,8 @@ import {
   GenerateUniqueID,
   GetColumnKeyHidden,
   GetColumnKeyShow,
+  GetGroupItems,
   GetTableColumnSizingOptions,
-  GetUniqueFromData,
   Reorder,
   ShowSettingButton,
 } from "./utils/Helper";
@@ -58,10 +58,47 @@ const TableV2: React.FC<ITableV2> = (props) => {
   );
   const dataSource = props.dataSource || defaultDataSource;
 
+  // ====================
+  // Show and Hide Column
+  // ====================
+  const columnsShow = GetColumnKeyShow(columnsData);
+  const columnsHidden = GetColumnKeyHidden(columnsData);
+
+  const [columnsCheckedValues, setcolumnsCheckedValues] = useState<
+    Record<string, string[]>
+  >({
+    show: columnsShow,
+  });
+  const [columnsUncheckedValues, setcolumnsUncheckedValues] = useState<
+    Record<string, string[]>
+  >({
+    hidden: columnsHidden,
+  });
+
+  useEffect(() => {
+    setcolumnsCheckedValues({ show: columnsShow });
+  }, [columnsShow]);
+
+  // ====================
+  // Grouping Data Source
+  // ====================
+  const [defaultGroupBy, setDefaultGroupBy] = useState<
+    Record<string, string[]>
+  >({
+    groupby: ["none"],
+  });
+  const groupBy = props.groupBy ? { groupby: [props.groupBy] } : defaultGroupBy;
+
+  // =============
+  // Column Sizing
+  // =============
   const [columnSizingOptions] = useState<TableColumnSizingOptions>(
     GetTableColumnSizingOptions(defaultColumns)
   );
 
+  // ==============
+  // Table Features
+  // ==============
   const {
     getRows,
     tableRef,
@@ -125,112 +162,15 @@ const TableV2: React.FC<ITableV2> = (props) => {
     },
   });
 
-  const columnsShow = useMemo(
-    () => GetColumnKeyShow(columnsData),
-    [columnsData]
-  );
-  const columnsHidden = useMemo(
-    () => GetColumnKeyHidden(columnsData),
-    [columnsData]
-  );
-
-  const [columnsCheckedValues, setcolumnsCheckedValues] = useState<
-    Record<string, string[]>
-  >({
-    show: columnsShow,
-  });
-  const [columnsUncheckedValues, setcolumnsUncheckedValues] = useState<
-    Record<string, string[]>
-  >({
-    hidden: columnsHidden,
-  });
-
-  useEffect(() => {
-    setcolumnsCheckedValues({ show: columnsShow });
-  }, [columnsShow]);
-
-  const onColumnsCheckedValueChange: MenuProps["onCheckedValueChange"] = (
-    _,
-    { name, checkedItems }
-  ) => {
-    const { show } = columnsCheckedValues;
-    const { hidden } = columnsUncheckedValues;
-
-    if (name === "show") {
-      const checked = show.filter((item) => checkedItems.includes(item));
-      const unchecked = show.filter((item) => !checkedItems.includes(item));
-
-      hidden.push(...unchecked);
-
-      setcolumnsCheckedValues({ show: checked });
-      setcolumnsUncheckedValues((prev) => {
-        return prev ? { ...prev, ["hidden"]: hidden } : { ["hidden"]: hidden };
-      });
-
-      const newColumns = displayColumnsData.filter((item) =>
-        checked.includes(item.label)
-      );
-
-      const [hiddenColumn] = displayColumnsData.filter(
-        (item) => !newColumns.includes(item)
-      );
-
-      props.defaultColumns && setDisplayColumnsData(newColumns);
-      props.onShowHideColumn?.(hiddenColumn, "hide");
-
-      return;
-    }
-
-    if (name === "hidden") {
-      show.push(...checkedItems);
-      const newUncheckedValues = hidden.filter(
-        (item) => !checkedItems.includes(item)
-      );
-
-      setcolumnsUncheckedValues({ hidden: newUncheckedValues });
-      setcolumnsCheckedValues((prev) => {
-        return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
-      });
-
-      const column = columnsData.find(
-        (obj) => obj.label === checkedItems[0]
-      ) as ITableV2Column;
-
-      props.defaultColumns &&
-        setDisplayColumnsData((prev) => [...prev, column]);
-      props.onShowHideColumn?.(column, "show");
-
-      return;
-    }
-  };
-
-  const [defaultGroupBy, setDefaultGroupBy] = useState<
-    Record<string, string[]>
-  >({
-    groupby: ["none"],
-  });
-  const groupBy = props.groupBy ? { groupby: [props.groupBy] } : defaultGroupBy;
-
-  const onGroupByChange: MenuProps["onCheckedValueChange"] = (
-    _,
-    { name, checkedItems }
-  ) => {
-    if (props.groupBy) {
-      props.onGroupByChange?.(groupBy["groupby"][0], checkedItems[0]);
-    } else {
-      setDefaultGroupBy((prev) => ({ ...prev, [name]: checkedItems }));
-    }
-  };
-
-  const groups = GetUniqueFromData(dataSource, groupBy["groupby"][0]);
+  const groups = GetGroupItems(dataSource, groupBy["groupby"][0]);
 
   const rows = sort(
     getRows((row) => {
       const selected = isRowSelected(row.rowId);
       return {
         ...row,
-        onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
         selected,
+        onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
         appearance:
           selected && props.selectionMode
             ? ("brand" as const)
@@ -299,8 +239,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
 
     props.onAddColumnClick?.(defaultNewColumn);
 
-    const { show } = columnsCheckedValues;
     if (props.defaultColumns) {
+      const { show } = columnsCheckedValues;
       show.push(defaultNewColumn.label);
       setcolumnsCheckedValues((prev) => {
         return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
@@ -311,13 +251,71 @@ const TableV2: React.FC<ITableV2> = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   const { show } = columnsCheckedValues;
-  //   show.push("something");
-  //   setcolumnsCheckedValues((prev) => {
-  //     return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
-  //   });
-  // }, [columnsData]);
+  const handleOnShowHideColumn: MenuProps["onCheckedValueChange"] = (
+    _,
+    { name, checkedItems }
+  ) => {
+    const { show } = columnsCheckedValues;
+    const { hidden } = columnsUncheckedValues;
+
+    if (name === "show") {
+      const checked = show.filter((item) => checkedItems.includes(item));
+      const unchecked = show.filter((item) => !checkedItems.includes(item));
+
+      hidden.push(...unchecked);
+
+      setcolumnsCheckedValues({ show: checked });
+      setcolumnsUncheckedValues((prev) => {
+        return prev ? { ...prev, ["hidden"]: hidden } : { ["hidden"]: hidden };
+      });
+
+      const newColumns = displayColumnsData.filter((item) =>
+        checked.includes(item.label)
+      );
+
+      const [hiddenColumn] = displayColumnsData.filter(
+        (item) => !newColumns.includes(item)
+      );
+
+      props.defaultColumns && setDisplayColumnsData(newColumns);
+      props.onShowHideColumn?.(hiddenColumn, "hide");
+
+      return;
+    }
+
+    if (name === "hidden") {
+      show.push(...checkedItems);
+      const newUncheckedValues = hidden.filter(
+        (item) => !checkedItems.includes(item)
+      );
+
+      setcolumnsUncheckedValues({ hidden: newUncheckedValues });
+      setcolumnsCheckedValues((prev) => {
+        return prev ? { ...prev, ["show"]: show } : { ["show"]: show };
+      });
+
+      const column = columnsData.find(
+        (obj) => obj.label === checkedItems[0]
+      ) as ITableV2Column;
+
+      props.defaultColumns &&
+        setDisplayColumnsData((prev) => [...prev, column]);
+      props.onShowHideColumn?.(column, "show");
+
+      return;
+    }
+  };
+
+  const handleOnGroupByChange: MenuProps["onCheckedValueChange"] = (
+    _,
+    { name, checkedItems }
+  ) => {
+    if (props.groupBy) {
+      props.onGroupByChange?.(groupBy["groupby"][0], checkedItems[0]);
+    } else {
+      setDefaultGroupBy((prev) => ({ ...prev, [name]: checkedItems }));
+    }
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -330,11 +328,11 @@ const TableV2: React.FC<ITableV2> = (props) => {
           showColumnTableProps={{
             checkedValues: columnsCheckedValues,
             uncheckedValues: columnsUncheckedValues,
-            onCheckedValueChange: onColumnsCheckedValueChange,
+            onCheckedValueChange: handleOnShowHideColumn,
           }}
           groupByTableProps={{
-            groupBy,
-            onGroupByChange,
+            groupBy: groupBy,
+            onGroupByChange: handleOnGroupByChange,
             groupByList: Object.keys(dataSource[0]),
           }}
         />

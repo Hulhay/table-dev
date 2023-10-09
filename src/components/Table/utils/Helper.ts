@@ -8,7 +8,6 @@ import { useMemo } from "react";
 
 export const CreateColumnHeader = (defaultColumns: ITableV2Column[]) =>
   useMemo(() => {
-    // console.log(defaultColumns)
     const columns: TableColumnDefinition<any>[] = [];
 
     defaultColumns.forEach((column: ITableV2Column) => {
@@ -66,13 +65,15 @@ export const TitleCase = (
   return final.join(stringJoin);
 };
 
-export const GetColumnKeyShow = (column: ITableV2Column[]): string[] => {
-  return column.filter((obj) => !obj.hidden).map((obj) => obj.label);
-};
+export const GetColumnKeyShow = (column: ITableV2Column[]): string[] =>
+  useMemo(() => {
+    return column.filter((obj) => !obj.hidden).map((obj) => obj.label);
+  }, [column]);
 
-export const GetColumnKeyHidden = (column: ITableV2Column[]): string[] => {
-  return column.filter((obj) => obj.hidden).map((obj) => obj.label);
-};
+export const GetColumnKeyHidden = (column: ITableV2Column[]): string[] =>
+  useMemo(() => {
+    return column.filter((obj) => obj.hidden).map((obj) => obj.label);
+  }, [column]);
 
 export const ShowSettingButton = (props: ITableV2) => {
   return (
@@ -82,14 +83,14 @@ export const ShowSettingButton = (props: ITableV2) => {
   );
 };
 
-export const GetUniqueFromData = (dataSource: any[], field: string) => {
-  const uniques = dataSource.reduce((result: any[], item: any) => {
+export const GetGroupItems = (dataSource: any[], field: string) => {
+  const groupItems = dataSource.reduce((result: any[], item: any) => {
     if (!result.includes(item[field])) {
       result.push(item[field]);
     }
     return result;
   }, []);
-  return uniques;
+  return groupItems;
 };
 
 export const GenerateUniqueID = () => {
