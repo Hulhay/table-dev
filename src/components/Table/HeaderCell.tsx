@@ -24,6 +24,7 @@ const HeaderCell: React.FC<HeaderTableCellProps> = (props) => {
 
   return (
     <div
+      key={props.column.key}
       ref={props.rearrangeColumnEnabled ? (node) => ref(drop(node)) : null}
       style={{ width: "100%" }}
       onClick={(e) => props.onHeaderCellClick?.(e, props.column)}

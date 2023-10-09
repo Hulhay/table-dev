@@ -32,7 +32,7 @@ const AddColumnControlled: React.FC = () => {
 
       const updatedDataSource = dataSource.map((ds) => ({
         ...ds,
-        [label]: "",
+        [label]: Math.random().toString(16).slice(2),
       }));
       setDataSource(updatedDataSource);
     }
