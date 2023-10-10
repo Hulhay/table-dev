@@ -10,7 +10,7 @@ const AddColumn: React.FC = () => {
         defaultColumns={columnsDummyAll}
         defaultDataSource={dataSourceDummy}
         resizable={true}
-        rearrangeColumnEnabled={true}
+        reorderColumnEnabled={true}
         menuShowColumnEnabled={true}
         menuAddColumnEnabled={true}
       />

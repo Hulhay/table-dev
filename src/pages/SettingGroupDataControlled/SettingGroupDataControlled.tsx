@@ -35,7 +35,7 @@ const SettingGroupDataControlled: React.FC = () => {
         onGroupByChange={onGroupByChange}
         resizable={false}
         selectionMode="multiselect"
-        rearrangeColumnEnabled={true}
+        reorderColumnEnabled={true}
         onRearrangeColumn={onRearrangeColumn}
         menuGroupDataSourceEnabled={true}
       />

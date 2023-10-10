@@ -11,7 +11,7 @@ const SettingGroupData: React.FC = () => {
         defaultDataSource={dataSourceDummy}
         resizable={false}
         selectionMode="multiselect"
-        rearrangeColumnEnabled={true}
+        reorderColumnEnabled={true}
         menuShowColumnEnabled={true}
         menuGroupDataSourceEnabled={true}
       />

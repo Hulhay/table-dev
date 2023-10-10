@@ -25,13 +25,13 @@ const HeaderCell: React.FC<HeaderTableCellProps> = (props) => {
   return (
     <div
       key={props.column.key}
-      ref={props.rearrangeColumnEnabled ? (node) => ref(drop(node)) : null}
+      ref={props.reorderColumnEnabled ? (node) => ref(drop(node)) : null}
       style={{ width: "100%" }}
       onClick={(e) => props.onHeaderCellClick?.(e, props.column)}
     >
       <Label
         style={{
-          cursor: props.rearrangeColumnEnabled ? "move" : "default",
+          cursor: props.reorderColumnEnabled ? "move" : "default",
           fontWeight: "bold",
           display: "flex",
           alignItems: "center",

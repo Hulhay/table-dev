@@ -32,7 +32,7 @@ export interface HeaderRowProps {
   checked: boolean | "mixed";
   onColumnMove: (dragIndex: number, hoverIndex: number) => void;
   columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
-  rearrangeColumnEnabled: boolean;
+  reorderColumnEnabled: boolean;
   headerSortProps: (columnId: TableColumnId) => {
     onClick: (e: React.MouseEvent) => void;
     sortDirection: SortDirection | undefined;
@@ -48,7 +48,7 @@ export interface HeaderTableCellProps {
   column: ITableV2Column;
   index: number;
   onColumnMove: (dragIndex: number, hoverIndex: number) => void;
-  rearrangeColumnEnabled: boolean;
+  reorderColumnEnabled: boolean;
   onRenderHeaderCell?: (column?: ITableV2Column) => JSX.Element;
   onHeaderCellClick?: (
     event?: React.MouseEvent,
@@ -61,7 +61,7 @@ export interface HeaderCellWrapperProps {
   index: number;
   onColumnMove: (dragIndex: number, hoverIndex: number) => void;
   columnSizing_unstable: TableFeaturesState<any>["columnSizing_unstable"];
-  rearrangeColumnEnabled: boolean;
+  reorderColumnEnabled: boolean;
   headerSortProps: (columnId: TableColumnId) => {
     onClick: (e: React.MouseEvent) => void;
     sortDirection: SortDirection | undefined;
@@ -152,15 +152,17 @@ export interface ITableV2 {
   resizable?: boolean; // default true
   onResizeColumn?: (columnKey?: string, width?: number) => void;
 
-  rearrangeColumnEnabled?: boolean; // default false
-  onRearrangeColumn?: (
+  reorderColumnEnabled?: boolean; // default false
+  onReorderColumn?: (
     newColumns?: ITableV2Column[],
-    columnKey?: string,
-    sourceIndex?: number,
-    destinationIndex?: number
+    column?: ITableV2Column
   ) => void;
 
-  onShowHideColumn?: (column?: ITableV2Column, mode?: ShowHideMode) => void;
+  onShowHideColumn?: (
+    newColumns?: ITableV2Column[],
+    column?: ITableV2Column,
+    mode?: ShowHideMode
+  ) => void;
 
   selectionMode?: "single" | "multiselect"; // default undefined
   subtleSelection?: boolean;

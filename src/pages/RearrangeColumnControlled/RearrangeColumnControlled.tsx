@@ -8,14 +8,12 @@ const RearrangeColumnControlled: React.FC = () => {
   const [columns, setColumns] = useState<ITableV2Column[]>(columnsDummy);
   const [dataSource] = useState(dataSourceDummy);
 
-  const onRearrangeColumn = (
+  const onReorderColumn = (
     newColumns?: ITableV2Column[],
-    columnKey?: string,
-    sourceIndex?: number,
-    destinationIndex?: number
+    column?: ITableV2Column,
   ) => {
     console.log(
-      `move ${columnKey} from index ${sourceIndex} to index ${destinationIndex}`
+      `move ${column?.label} moved`
     );
     newColumns && setColumns(newColumns);
   };
@@ -28,8 +26,8 @@ const RearrangeColumnControlled: React.FC = () => {
         columns={columns}
         dataSource={dataSource}
         resizable={true}
-        rearrangeColumnEnabled={true}
-        onRearrangeColumn={onRearrangeColumn}
+        reorderColumnEnabled={true}
+        onReorderColumn={onReorderColumn}
       />
     </div>
   );

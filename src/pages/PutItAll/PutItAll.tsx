@@ -57,7 +57,7 @@ const showHideOptions = [
   },
   {
     label: "Created By",
-    value: "createdby",
+    value: "createdBy",
   },
   {
     label: "Domain",
@@ -203,7 +203,7 @@ const PutItAll: React.FC = () => {
         loading={isLoading as boolean}
         resizable
         subtleSelection
-        rearrangeColumnEnabled
+        reorderColumnEnabled
         selectionMode="multiselect"
         onAddRowClick={onAddRowClick}
         onAddColumnClick={onAddColumnClick}

@@ -47,7 +47,7 @@ const AddRowInSpesificGroup: React.FC = () => {
         groupBy="priority"
         resizable={false}
         selectionMode="multiselect"
-        rearrangeColumnEnabled={true}
+        reorderColumnEnabled={true}
         onRearrangeColumn={onRearrangeColumn}
         addRowEnabled={true}
         onAddRowClick={onAddRowClick}

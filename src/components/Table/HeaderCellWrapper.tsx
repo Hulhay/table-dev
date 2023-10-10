@@ -29,7 +29,7 @@ const HeaderCellWrapper: React.FC<HeaderCellWrapperProps> = (props) => {
             onRenderHeaderCell={props.column.onRenderDataSource}
             onHeaderCellClick={props.onHeaderCellClick}
             onColumnMove={props.onColumnMove}
-            rearrangeColumnEnabled={props.rearrangeColumnEnabled}
+            reorderColumnEnabled={props.reorderColumnEnabled}
           />
         </TableHeaderCell>
       </MenuTrigger>

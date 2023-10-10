@@ -9,7 +9,7 @@ const RearrangeColumn: React.FC = () => {
         defaultColumns={columnsDummy}
         defaultDataSource={dataSourceDummy}
         resizable={true}
-        rearrangeColumnEnabled={true}
+        reorderColumnEnabled={true}
       />
     </div>
   );

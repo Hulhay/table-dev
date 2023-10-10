@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Header, TableV2 } from "../../components";
 import {
   ITableV2Column,
@@ -13,7 +13,7 @@ const AddColumnControlled: React.FC = () => {
   const [dataSource, setDataSource] =
     useState<IDataSourceBasic[]>(dataSourceDummy);
 
-  const onRearrangeColumn = (newColumns?: ITableV2Column[]) => {
+  const onReorderColumn = (newColumns?: ITableV2Column[]) => {
     newColumns && setColumns(newColumns);
   };
 
@@ -40,15 +40,14 @@ const AddColumnControlled: React.FC = () => {
     }
   };
 
-  const onShowHideColumn = (column?: ITableV2Column, mode?: ShowHideMode) => {
+  const onShowHideColumn = (newColumns?: ITableV2Column[], column?: ITableV2Column, mode?: ShowHideMode) => {
     console.log(`${mode} column ${column?.label}`);
-    const newColumns = [...columns];
-    const columnIndex = newColumns.findIndex((col) => col.key === column?.key);
-    if (columnIndex !== -1) {
-      newColumns[columnIndex].hidden = mode === "hide" ? true : false;
-      setColumns(newColumns);
-    }
+    newColumns && setColumns(newColumns);
   };
+
+  useEffect(() => {
+    console.log(columns)
+  }, [columns])
 
   return (
     <div style={{ margin: "0 15px" }}>
@@ -65,12 +64,12 @@ const AddColumnControlled: React.FC = () => {
         columns={columns}
         dataSource={dataSource}
         resizable={true}
-        rearrangeColumnEnabled={true}
+        reorderColumnEnabled={true}
         menuShowColumnEnabled={true}
         menuAddColumnEnabled={true}
         onRowClick={onRowClick}
         onAddColumnClick={onAddColumnClick}
-        onRearrangeColumn={onRearrangeColumn}
+        onReorderColumn={onReorderColumn}
         onShowHideColumn={onShowHideColumn}
       />
     </div>

@@ -24,8 +24,8 @@ const HeaderRow: React.FC<HeaderRowProps> = (props) => {
             headerSortProps={props.headerSortProps}
             onHeaderCellClick={props.onHeaderCellClick}
             columnSizing_unstable={props.columnSizing_unstable}
-            rearrangeColumnEnabled={
-              props.rearrangeColumnEnabled === true ? true : false
+            reorderColumnEnabled={
+              props.reorderColumnEnabled === true ? true : false
             }
           />
         );
