@@ -269,13 +269,14 @@ export const columnsDummyAll: ITableV2Column[] = [
     label: "ID",
     dataIndex: "id",
     minWidth: 50,
+    width: 50,
     hidden: true,
   },
   {
     key: "title",
     label: "Title",
     dataIndex: "title",
-    minWidth: 250,
+    minWidth: 150,
     compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
       return a.title.localeCompare(b.title);
     },
@@ -292,6 +293,8 @@ export const columnsDummyAll: ITableV2Column[] = [
     key: "priority",
     label: "Priority",
     dataIndex: "priority",
+    minWidth: 70,
+    width: 70,
     onRenderDataSource: (data: IDataSourceBasic) => titleCase(data.priority),
   },
   {
@@ -303,6 +306,14 @@ export const columnsDummyAll: ITableV2Column[] = [
     },
   },
   {
+    key: "domain",
+    label: "Domain",
+    dataIndex: "domain",
+    hidden: true,
+    minWidth: 60,
+    width: 60,
+  },
+  {
     key: "createdBy",
     label: "Created By",
     dataIndex: "createdBy",
@@ -312,10 +323,9 @@ export const columnsDummyAll: ITableV2Column[] = [
     },
   },
   {
-    key: "domain",
-    label: "Domain",
-    dataIndex: "domain",
-    hidden: true,
+    key: "dueDate",
+    label: "Due Date",
+    dataIndex: "dueDate",
     minWidth: 60,
   },
 ];
@@ -329,6 +339,7 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     assignee: "Sandra",
     createdBy: "Admin",
     domain: "BE",
+    dueDate: "2023-10-10",
   },
   {
     id: "task-2",
@@ -338,6 +349,7 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     assignee: "Sandra",
     createdBy: "PM",
     domain: "BE",
+    dueDate: "2023-10-10",
   },
   {
     id: "task-3",
@@ -347,6 +359,7 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     assignee: "Poy",
     createdBy: "Admin",
     domain: "BE",
+    dueDate: "2023-10-10",
   },
   {
     id: "task-4",
@@ -356,6 +369,7 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     assignee: "Poy",
     createdBy: "Tech Lead",
     domain: "FE",
+    dueDate: "2023-10-10",
   },
   {
     id: "task-5",
@@ -365,6 +379,7 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     assignee: "Abe",
     createdBy: "Admin",
     domain: "BE",
+    dueDate: "2023-10-10",
   },
   {
     id: "task-6",
@@ -374,6 +389,7 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     assignee: "Poy",
     createdBy: "Tech Lead",
     domain: "FE",
+    dueDate: "2023-10-10",
   },
   {
     id: "task-7",
@@ -383,5 +399,6 @@ export const dataSourceDummy: IDataSourceBasic[] = [
     assignee: "Abe",
     createdBy: "Admin",
     domain: "BE",
+    dueDate: "2023-10-10",
   },
 ];

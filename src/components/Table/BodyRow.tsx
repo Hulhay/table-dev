@@ -25,6 +25,7 @@ const BodyRow: React.FC<BodyRowProps> = (props) => {
 
       {/* Table Cell */}
       {props.columnsData.map((column: ITableV2Column, index: number) => {
+        if (column.hidden) return
         return (
           <TableCell
             key={index}

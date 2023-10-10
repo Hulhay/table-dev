@@ -13,7 +13,7 @@ const RearrangeColumnControlled: React.FC = () => {
     column?: ITableV2Column,
   ) => {
     console.log(
-      `move ${column?.label} moved`
+      `${column?.label} moved`
     );
     newColumns && setColumns(newColumns);
   };

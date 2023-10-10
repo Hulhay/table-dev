@@ -15,6 +15,7 @@ const HeaderRow: React.FC<HeaderRowProps> = (props) => {
         />
       )}
       {props.columnsData.map((column: ITableV2Column, index: number) => {
+        if (column.hidden) return 
         return (
           <HeaderCellWrapper
             key={column.key}

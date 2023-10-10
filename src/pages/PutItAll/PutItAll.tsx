@@ -71,9 +71,8 @@ const PutItAll: React.FC = () => {
     useState<IDataSourceBasic[]>(dataSourceDummy);
   const [isLoading, setIsLoading] = useState<CheckboxProps["checked"]>(false);
   const [groupBy, setGroupBy] = useState("none");
-  const [selectedGroupBy, setSelectedGroupBy] = React.useState<string[]>([
-    "none",
-  ]);
+  const [selectedGroupBy, setSelectedGroupBy] = useState<string[]>(["none"]);
+  const [showHideOpt, setShowHideOpt] = useState(showHideOptions);
 
   const defaultShowColumn = columns.reduce(
     (result: string[], item: ITableV2Column) => {
@@ -85,7 +84,7 @@ const PutItAll: React.FC = () => {
     []
   );
 
-  const onRearrangeColumn = (newColumns?: ITableV2Column[]) => {
+  const onReorderColumn = (newColumns?: ITableV2Column[]) => {
     newColumns && setColumns(newColumns);
   };
 
@@ -120,6 +119,10 @@ const PutItAll: React.FC = () => {
         [label]: defaultValue,
       }));
       setDataSource(updatedDataSource);
+      setShowHideOpt((prev) => [
+        ...prev,
+        { label: newColumn.label, value: newColumn.key },
+      ]);
     }
   };
 
@@ -138,6 +141,7 @@ const PutItAll: React.FC = () => {
         status: status,
         createdBy: "Admin",
         domain: domain,
+        dueDate: "2023-10-10",
       };
       setDataSource((prev) => [...prev, newData]);
     }
@@ -189,7 +193,7 @@ const PutItAll: React.FC = () => {
           defaultSelectedOptions={defaultShowColumn}
           onOptionSelect={onShowOptionSelect}
         >
-          {showHideOptions.map((opt) => (
+          {showHideOpt.map((opt) => (
             <Option key={opt.value} value={opt.value}>
               {opt.label}
             </Option>
@@ -207,7 +211,7 @@ const PutItAll: React.FC = () => {
         selectionMode="multiselect"
         onAddRowClick={onAddRowClick}
         onAddColumnClick={onAddColumnClick}
-        onRearrangeColumn={onRearrangeColumn}
+        onReorderColumn={onReorderColumn}
       />
     </div>
   );

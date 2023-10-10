@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ITableV2, ITableV2Column } from "./utils/Interface";
 import {
   MenuProps,
@@ -42,15 +42,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
   );
   const columnsData = props.columns || defaultColumns;
 
-  const displayColumnsData = useMemo(
-    () => columnsData.filter((obj) => !obj.hidden),
-    [columnsData]
-  );
+  // const displayColumnsData = columnsData;
 
-  // useEffect(() => {
-  //   props.columns &&
-  //     setDisplayColumnsData(columnsData.filter((obj) => !obj.hidden));
-  // }, [columnsData]);
 
   // ===========
   // Data Source
@@ -95,7 +88,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
   // Column Sizing
   // =============
   const [columnSizingOptions] = useState<TableColumnSizingOptions>(
-    GetTableColumnSizingOptions(defaultColumns)
+    GetTableColumnSizingOptions(columnsData)
   );
 
   // ==============
@@ -115,7 +108,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     },
   } = useTableFeatures(
     {
-      columns: CreateColumnHeader(displayColumnsData),
+      columns: CreateColumnHeader(columnsData),
       items: dataSource,
     },
     [
@@ -189,7 +182,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     destinationIndex: number
   ) => {
     const newOrderColumns = Reorder(
-      displayColumnsData,
+      columnsData,
       sourceIndex,
       destinationIndex
     );
@@ -207,7 +200,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
     });
 
     props.defaultColumns && setDefaultColumns(newColumns);
-    props.onReorderColumn?.(newColumns, displayColumnsData[sourceIndex]);
+    props.onReorderColumn?.(newColumns, columnsData[sourceIndex]);
   };
 
   const handleOnRowClick = (
@@ -278,7 +271,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
         hidden: !checked.includes(column.label),
       }));
 
-      const [hiddenColumn] = displayColumnsData.filter(
+      const [hiddenColumn] = columnsData.filter(
         (item) => !columns.includes(item)
       );
 
@@ -361,7 +354,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
             <TableHeader>
               <HeaderRow
                 toggleAllRows={toggleAllRows}
-                columnsData={displayColumnsData}
+                columnsData={columnsData}
                 onColumnMove={handleReorderColumn}
                 headerSortProps={headerSortProps}
                 selectionMode={props.selectionMode}
@@ -383,8 +376,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
                 <LoadingState
                   colspan={
                     props.selectionMode
-                      ? displayColumnsData.length + 1
-                      : displayColumnsData.length
+                      ? columnsData.length + 1
+                      : columnsData.length
                   }
                 />
               ) : (
@@ -399,8 +392,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             label={groupItem}
                             colspan={
                               props.selectionMode
-                                ? displayColumnsData.length + 1
-                                : displayColumnsData.length
+                                ? columnsData.length + 1
+                                : columnsData.length
                             }
                           />
                         )}
@@ -418,7 +411,7 @@ const TableV2: React.FC<ITableV2> = (props) => {
                                 index={index}
                                 selected={selected}
                                 appearance={appearance}
-                                columnsData={displayColumnsData}
+                                columnsData={columnsData}
                                 onRowClick={handleOnRowClick}
                                 selectionMode={props.selectionMode}
                                 subtleSelection={props.subtleSelection}
@@ -434,8 +427,8 @@ const TableV2: React.FC<ITableV2> = (props) => {
                             onAddRowClick={() => handleOnAddRowClick(groupItem)}
                             colspan={
                               props.selectionMode
-                                ? displayColumnsData.length + 1
-                                : displayColumnsData.length
+                                ? columnsData.length + 1
+                                : columnsData.length
                             }
                           />
                         )}
