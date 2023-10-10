@@ -32,6 +32,7 @@ const AddRow: React.FC = () => {
         status: status,
         createdBy: "Admin",
         domain: domain,
+        dueDate: "2023-10-10"
       };
       console.log(`Row ${newData.id} created`)
       console.log(newData)

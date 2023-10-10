@@ -11,7 +11,7 @@ const AddRowInSpesificGroup: React.FC = () => {
   const [dataSource, setDataSource] =
     useState<IDataSourceBasic[]>(dataSourceDummy);
 
-  const onRearrangeColumn = (newColumns?: ITableV2Column[]) => {
+  const onReorderColumn = (newColumns?: ITableV2Column[]) => {
     newColumns && setColumns(newColumns);
   };
 
@@ -27,6 +27,7 @@ const AddRowInSpesificGroup: React.FC = () => {
         status: "todo",
         createdBy: "Admin",
         domain: "Other",
+        dueDate: "2023-10-10"
       };
       console.log(`Row ${newData.id} created`);
       console.log(newData);
@@ -48,7 +49,7 @@ const AddRowInSpesificGroup: React.FC = () => {
         resizable={false}
         selectionMode="multiselect"
         reorderColumnEnabled={true}
-        onRearrangeColumn={onRearrangeColumn}
+        onReorderColumn={onReorderColumn}
         addRowEnabled={true}
         onAddRowClick={onAddRowClick}
       />

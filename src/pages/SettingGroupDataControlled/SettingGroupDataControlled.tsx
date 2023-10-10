@@ -11,7 +11,7 @@ const SettingGroupDataControlled: React.FC = () => {
   const [dataSource] = useState<IDataSourceBasic[]>(dataSourceDummy);
   const [groupBy, setGroupBy] = useState("status");
 
-  const onRearrangeColumn = (newColumns?: ITableV2Column[]) => {
+  const onReorderColumn = (newColumns?: ITableV2Column[]) => {
     newColumns && setColumns(newColumns);
   };
 
@@ -36,7 +36,7 @@ const SettingGroupDataControlled: React.FC = () => {
         resizable={false}
         selectionMode="multiselect"
         reorderColumnEnabled={true}
-        onRearrangeColumn={onRearrangeColumn}
+        onReorderColumn={onReorderColumn}
         menuGroupDataSourceEnabled={true}
       />
     </div>
