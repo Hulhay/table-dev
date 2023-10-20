@@ -231,6 +231,15 @@ export const columnsDummyNoAction: ITableV2Column[] = [
       return <Status status={data.status} />;
     },
   },
+  {
+    key: "createdBy",
+    label: "Created By",
+    dataIndex: "createdBy",
+    hidden: true,
+    compare: (a: IDataSourceBasic, b: IDataSourceBasic) => {
+      return a.createdBy.localeCompare(b.createdBy);
+    },
+  },
 ];
 
 export const columnsDummyAddRowSpesificGroup: ITableV2Column[] = [
