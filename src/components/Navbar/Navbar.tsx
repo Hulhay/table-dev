@@ -132,6 +132,11 @@ const navLink: INavLinkGroup[] = [
         url: "/put-it-all",
         key: "put-it-all",
       },
+      {
+        name: "Cell Input",
+        url: "/cell-input",
+        key: "cell-input",
+      },
     ],
   },
 ];

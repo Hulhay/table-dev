@@ -6,10 +6,11 @@ import {
   Option,
 } from "@fluentui/react-components";
 import React, { useState } from "react";
-import { Header, TableV2 } from "../../components";
+import { Header } from "../../components";
 import { columnsDummyAll, dataSourceDummy } from "../../data/basic";
 import { ITableV2Column } from "../../components/Table/utils/Interface";
 import { IDataSourceBasic } from "../../data/interface";
+import { TableV9 } from "@kitameraki/teamswork-library";
 
 const groupByOptions = [
   {
@@ -200,7 +201,7 @@ const PutItAll: React.FC = () => {
           ))}
         </Dropdown>
       </div>
-      <TableV2
+      <TableV9
         groupBy={groupBy}
         columns={columns}
         dataSource={dataSource}

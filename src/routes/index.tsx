@@ -8,6 +8,7 @@ import {
   AddRowInSpesificGroup,
   BasicControlled,
   BasicUncontrolled,
+  CellInput,
   CustomHeaderCell,
   Home,
   LoadingState,
@@ -135,6 +136,10 @@ const Navigations = createBrowserRouter([
       {
         path: "put-it-all",
         element: <PutItAll />,
+      },
+      {
+        path: "cell-input",
+        element: <CellInput />,
       },
     ],
   },

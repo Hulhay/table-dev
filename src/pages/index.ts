@@ -24,3 +24,4 @@ export { AddColumnControlled } from "./AddColumnControlled";
 export { AddRowInSpesificGroup } from "./AddRowInSpesificGroup";
 export { LoadingState } from "./LoadingState";
 export { PutItAll } from "./PutItAll";
+export { CellInput } from "./CellInput";

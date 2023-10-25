@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Header, TableV2 } from "../../components";
+import { Header } from "../../components";
 import { ITableV2Column } from "../../components/Table/utils/Interface";
 import { columnsDummy, dataSourceDummy } from "../../data/basic";
 import { IDataSourceBasic } from "../../data/interface";
 import { Text } from "@fluentui/react-components";
+import { TableV9 } from "@kitameraki/teamswork-library";
 
 const BasicControlled: React.FC = () => {
   const [columns] = useState<ITableV2Column[]>(columnsDummy);
@@ -32,7 +33,7 @@ const BasicControlled: React.FC = () => {
         Callback. <br />
         Please see the console (Ctrl + Shift + I)
       </Text>
-      <TableV2
+      <TableV9
         columns={columns}
         dataSource={dataSource}
         resizable={false}
